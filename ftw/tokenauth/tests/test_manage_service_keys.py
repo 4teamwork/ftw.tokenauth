@@ -44,6 +44,7 @@ class TestManageServiceKeysView(FunctionalTestCase):
         with freeze(datetime(2018, 1, 1, 15, 30)):
             browser.fill({
                 'Title': 'My new key',
+                'IP Range': '192.168.0.0/16',
             }).find('Issue key').click()
 
         self.assertEqual(1, len(info_messages()))
@@ -60,6 +61,7 @@ class TestManageServiceKeysView(FunctionalTestCase):
         self.assertEqual(datetime(2018, 1, 1, 15, 30), service_key['issued'])
         self.assertEqual(TEST_USER_ID, service_key['user_id'])
         self.assertIn('client_id', service_key)
+        self.assertEqual('192.168.0.0/16', service_key['ip_range'])
         self.assertIn('public_key', service_key)
 
     @browsing
@@ -69,6 +71,7 @@ class TestManageServiceKeysView(FunctionalTestCase):
 
         browser.fill({
             'Title': 'My new key',
+            'IP Range': '192.168.0.0/16',
         }).find('Issue key').click()
 
         self.assertEqual(1, len(info_messages()))
@@ -100,6 +103,23 @@ class TestManageServiceKeysView(FunctionalTestCase):
             'http://nohost/plone/@@oauth2-token', keyfile_data['token_uri'])
 
     @browsing
+    def test_issuing_key_without_ip_range_is_allowed(self, browser):
+        browser.login().open(view='@@manage-service-keys')
+        browser.find('Issue new service key').click()
+
+        browser.fill({'Title': 'Key without IP range'})
+        browser.find('Issue key').click()
+
+        assert_no_error_messages()
+
+        storage = CredentialStorage(self.plugin)
+        self.assertEqual(1, len(storage.list_service_keys(TEST_USER_ID)))
+        key = storage.list_service_keys(TEST_USER_ID)[0]
+
+        self.assertEqual('Key without IP range', key['title'])
+        self.assertEqual(None, key['ip_range'])
+
+    @browsing
     def test_issuing_key_without_title_is_not_allowed(self, browser):
         browser.login().open(view='@@manage-service-keys')
         browser.find('Issue new service key').click()
@@ -110,6 +130,25 @@ class TestManageServiceKeysView(FunctionalTestCase):
         self.assertEqual(
             {'Title':
                 ['Required input is missing.']},
+            erroneous_fields(browser.forms['form']))
+
+        storage = CredentialStorage(self.plugin)
+        self.assertEqual(0, len(storage.list_service_keys(TEST_USER_ID)))
+
+    @browsing
+    def test_issuing_key_with_invalid_ip_range_is_rejected(self, browser):
+        browser.login().open(view='@@manage-service-keys')
+        browser.find('Issue new service key').click()
+        browser.fill({
+            'Title': 'Key with invalid IP range',
+            'IP Range': '192.168.5.5/16',
+        }).find('Issue key').click()
+
+        self.assertEqual(['There were some errors.'], error_messages())
+
+        self.assertEqual(
+            {'IP Range':
+                ['Invalid IP range: 192.168.5.5/16 has host bits set']},
             erroneous_fields(browser.forms['form']))
 
         storage = CredentialStorage(self.plugin)
@@ -132,7 +171,8 @@ class TestManageServiceKeysView(FunctionalTestCase):
 
         with freeze(datetime(2018, 5, 5, 12, 45)):
             create(Builder('service_key')
-                   .having(title='Key 2'))
+                   .having(title='Key 2',
+                           ip_range='192.168.0.0/16'))
         transaction.commit()
 
         storage = CredentialStorage(self.plugin)
@@ -143,13 +183,13 @@ class TestManageServiceKeysView(FunctionalTestCase):
         table = browser.css('#table-service-keys').first.lists()
 
         self.assertEquals(
-            ['', 'Title', 'Client-ID', 'Issued', ''],
+            ['', 'Title', 'Client-ID', 'IP Range', 'Issued', ''],
             table[0])
         self.assertEquals(
-            ['', 'Key 1', client_ids[0], 'Jan 01, 2017 03:30 PM', 'Edit'],  # noqa
+            ['', 'Key 1', client_ids[0], '', 'Jan 01, 2017 03:30 PM', 'Edit'],  # noqa
             table[1])
         self.assertEquals(
-            ['', 'Key 2', client_ids[1], 'May 05, 2018 12:45 PM', 'Edit'],  # noqa
+            ['', 'Key 2', client_ids[1], '192.168.0.0/16', 'May 05, 2018 12:45 PM', 'Edit'],  # noqa
             table[2])
 
     @browsing
@@ -191,6 +231,7 @@ class TestEditServiceKeysView(FunctionalTestCase):
 
         browser.fill({
             'Title': 'New title',
+            'IP Range': '10.0.0.0/24',
         }).find('Apply').click()
 
         self.assertEqual(['Data successfully updated.'], info_messages())
@@ -201,11 +242,13 @@ class TestEditServiceKeysView(FunctionalTestCase):
         key = users_keys[0]
 
         self.assertEqual('New title', key['title'])
+        self.assertEqual('10.0.0.0/24', key['ip_range'])
 
     @browsing
     def test_edit_key_form_validates_constraints(self, browser):
         create(Builder('service_key')
-               .having(title='Some key'))
+               .having(title='Some key',
+                       ip_range='192.168.0.0/16'))
         transaction.commit()
 
         browser.login().open(view='@@manage-service-keys')
@@ -214,12 +257,15 @@ class TestEditServiceKeysView(FunctionalTestCase):
 
         browser.fill({
             'Title': '',
+            'IP Range': '10.0.5.5/24',
         }).find('Apply').click()
 
         self.assertEqual(['There were some errors.'], error_messages())
 
         self.assertEqual(
-            {'Title':
+            {'IP Range':
+                ['Invalid IP range: 10.0.5.5/24 has host bits set'],
+             'Title':
                 ['Required input is missing.']},
             erroneous_fields(browser.forms['form']))
 
@@ -230,11 +276,13 @@ class TestEditServiceKeysView(FunctionalTestCase):
 
         # Key shouldn't have been updated
         self.assertEqual('Some key', service_key['title'])
+        self.assertEqual('192.168.0.0/16', service_key['ip_range'])
 
     @browsing
     def test_edit_key_form_retains_widget_values_on_error(self, browser):
         create(Builder('service_key')
-               .having(title='Some key'))
+               .having(title='Some key',
+                       ip_range='192.168.0.0/16'))
         transaction.commit()
 
         browser.login().open(view='@@manage-service-keys')
@@ -243,18 +291,22 @@ class TestEditServiceKeysView(FunctionalTestCase):
 
         browser.fill({
             'Title': '',
+            'IP Range': '10.0.5.5/24',
         }).find('Apply').click()
 
         self.assertEqual(['There were some errors.'], error_messages())
 
         self.assertEqual(
-            {'Title':
+            {'IP Range':
+                ['Invalid IP range: 10.0.5.5/24 has host bits set'],
+             'Title':
                 ['Required input is missing.']},
             erroneous_fields(browser.forms['form']))
 
         form = browser.forms['form']
         self.assertEquals(
-            [('form.widgets.title', ''),
+            [('form.widgets.ip_range', '10.0.5.5/24'),
+             ('form.widgets.title', ''),
              ('form.buttons.cancel', 'Cancel'),
              ('form.buttons.apply', 'Apply')],
             form.values.items())

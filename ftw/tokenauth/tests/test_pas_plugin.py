@@ -88,6 +88,46 @@ class TestTokenAuthPlugin(FunctionalTestCase):
         }
         self.assertEqual(None, self.plugin.authenticateCredentials(creds))
 
+    def test_authenticate_credentials_denies_unkown_client_ip(self):
+        # If an allowed IP range is configured, any unknown client IP should
+        # be rejected (happens if trusted-proxies isn't set up properly).
+        access_token = create(Builder('access_token')
+                              .from_key(Builder('service_key')
+                                        .having(ip_range='192.168.0.0/16')))
+        creds = {
+            'extractor': 'token_auth',
+            'access_token': access_token['token'],
+        }
+        self.assertEqual(None, self.plugin.authenticateCredentials(creds))
+
+    def test_authenticate_credentials_denies_unauthorized_ip_range(self):
+        self.request._client_addr = '127.0.0.1'
+        self.assertEqual('127.0.0.1', self.request.getClientAddr())
+
+        access_token = create(Builder('access_token')
+                              .from_key(Builder('service_key')
+                                        .having(ip_range='192.168.0.0/16')))
+        creds = {
+            'extractor': 'token_auth',
+            'access_token': access_token['token'],
+        }
+        self.assertEqual(None, self.plugin.authenticateCredentials(creds))
+
+    def test_authenticate_credentials_allows_authorized_ip_range(self):
+        self.request._client_addr = '127.0.0.1'
+        self.assertEqual('127.0.0.1', self.request.getClientAddr())
+
+        access_token = create(Builder('access_token')
+                              .from_key(Builder('service_key')
+                                        .having(ip_range='127.0.0.0/8')))
+        creds = {
+            'extractor': 'token_auth',
+            'access_token': access_token['token'],
+        }
+        self.assertEqual(
+            (TEST_USER_ID, TEST_USER_ID),
+            self.plugin.authenticateCredentials(creds))
+
     def test_cleans_up_expired_tokens(self):
         storage = CredentialStorage(self.plugin)
 

@@ -1,7 +1,20 @@
+from ftw.tokenauth.pas.ip_range import InvalidIPRangeSpecification
+from ftw.tokenauth.pas.ip_range import parse_ip_range
 from plone import api
 from plone.supermodel import model
 from z3c.form.form import Form
 from zope import schema
+from zope.interface import Invalid
+
+
+def valid_ip_range(value):
+    """Form validator that checks for a valid IP range specification.
+    """
+    try:
+        parse_ip_range(value)
+    except InvalidIPRangeSpecification as exc:
+        raise Invalid('Invalid IP range: %s' % str(exc))
+    return True
 
 
 class IKeyMetadataSchema(model.Schema):
@@ -25,6 +38,12 @@ class IKeyMetadataSchema(model.Schema):
     issued = schema.Datetime(
         title=u"Issued",
         readonly=True,
+    )
+
+    ip_range = schema.TextLine(
+        title=u"IP Range",
+        required=False,
+        constraint=valid_ip_range,
     )
 
 

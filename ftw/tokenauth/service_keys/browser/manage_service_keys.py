@@ -33,6 +33,7 @@ class ManageServiceKeysView(BrowserView):
             {'client_id': key['client_id'],
              'key_id': key['key_id'],
              'title': key['title'],
+             'ip_range': key['ip_range'],
              'issued': key['issued']}
             for key in users_keys]
 

@@ -33,7 +33,8 @@ class ServiceKeyBuilder(object):
     def create(self, **kwargs):
         private_key, service_key = self.plugin.issue_keypair(
             self.arguments.get('user_id'),
-            self.arguments.get('title'))
+            self.arguments.get('title'),
+            self.arguments.get('ip_range'))
 
         return service_key
 
@@ -69,6 +70,7 @@ class KeyPairBuilder(object):
             self.arguments.get('user_id'),
             self.arguments.get('title'),
             self.arguments.get('token_uri'),
+            self.arguments.get('ip_range'),
         )
         # Override the randomly created client_id
         service_key['client_id'] = self.arguments.get('client_id')

@@ -30,7 +30,7 @@ class IssueKeyForm(BaseForm):
     label = u'Issue Service Key'
     description = u'Issue a key to be used for API access by a service account'
 
-    fields = Fields(IKeyMetadataSchema).select('title')
+    fields = Fields(IKeyMetadataSchema).select('title', 'ip_range')
 
     download_key_template = ViewPageTemplateFile('download_key.pt')
 
@@ -44,7 +44,7 @@ class IssueKeyForm(BaseForm):
         user_id = api.user.get_current().id
 
         private_key, service_key = self.get_plugin().issue_keypair(
-            user_id, data['title'])
+            user_id, data['title'], data['ip_range'])
 
         self._key_issued = True
         self._generated_private_key = private_key

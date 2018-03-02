@@ -2,6 +2,7 @@ from AccessControl.requestmethod import postonly
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from datetime import datetime
 from datetime import timedelta
+from ftw.tokenauth.pas.ip_range import permitted_ip
 from ftw.tokenauth.pas.storage import CredentialStorage
 from ftw.tokenauth.service_keys.key_generation import create_service_key_pair
 from logging import getLogger
@@ -140,10 +141,10 @@ class TokenAuthenticationPlugin(BasePlugin):
 
     security.declarePrivate('issue_keypair')
 
-    def issue_keypair(self, user_id, title):
+    def issue_keypair(self, user_id, title, ip_range=None):
         token_uri = self.get_token_uri()
         private_key, service_key = create_service_key_pair(
-            user_id, title, token_uri)
+            user_id, title, token_uri, ip_range=ip_range)
 
         storage = CredentialStorage(self)
         storage.add_service_key(service_key)
@@ -218,6 +219,22 @@ class TokenAuthenticationPlugin(BasePlugin):
 
         # Fetch service key that the token was tied to (by us)
         service_key = storage.get_service_key(stored_access_token['key_id'])
+
+        ip_range = service_key['ip_range']
+        if ip_range is not None:
+            client_ip = self.REQUEST.getClientAddr()
+            if not client_ip:
+                # IP range limitations in place - require that we get a
+                # client IP (trusted proxies need to be set up correctly)
+                log.warn('Authentication attempt for key with IP range '
+                         'restrictions, but failed to get client IP from '
+                         'getClientAddr() - check trusted-proxy in zope.conf')
+                return None
+
+            if not permitted_ip(client_ip, ip_range):
+                log.warn('Authentication attempt from '
+                         'disallowed IP %s' % client_ip)
+                return None
 
         # Fetch and verify the user associated with the service_key
         user_id = service_key['user_id']

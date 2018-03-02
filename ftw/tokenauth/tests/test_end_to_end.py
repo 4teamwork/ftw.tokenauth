@@ -19,6 +19,7 @@ class TestEndToEndAuthenticationFlow(FunctionalZServerTestCase):
         browser.login().open(view='@@manage-service-keys')
         browser.find('Issue new service key').click()
         browser.fill({'Title': 'My new key'})
+        # No IP range restriction, we test this separately
         browser.find('Issue key').click()
 
         self.assertEqual('Download Service Key', browser.css('h1').first.text)

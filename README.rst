@@ -86,6 +86,8 @@ They need to issue a service key that is then displayed **exactly once** for
 download, and store the private key in a safe location accessible to the
 client that will use it.
 
+TODO: Document IP range restrictions and key revocation.
+
 2. Create and sign JWT authorization grant using service key
 ------------------------------------------------------------
 

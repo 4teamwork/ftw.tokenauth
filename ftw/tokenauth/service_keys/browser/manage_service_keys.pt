@@ -27,6 +27,7 @@
                         <th></th>
                         <th>Title</th>
                         <th>Client-ID</th>
+                        <th>IP Range</th>
                         <th>Issued</th>
                         <th></th>
                     </tr>
@@ -41,6 +42,7 @@
                         <td><label tal:content="key_info/title"
                                    tal:attributes="for string:select-${key_info/key_id}" /></td>
                         <td tal:content="key_info/client_id" />
+                        <td tal:content="key_info/ip_range" />
                         <td tal:content="python:toLocalizedTime(key_info['issued'], long_format=1)"/>
                         <td>
                             <a tal:attributes="href string:${context/absolute_url}/@@manage-service-keys-edit?key_id=${key_info/key_id}">

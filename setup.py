@@ -67,6 +67,7 @@ setup(name='ftw.tokenauth',
           # Other dependencies
           'cryptography',
           'ftw.profilehook',
+          'py2-ipaddress',
           'PyJWT',
       ],
       tests_require=tests_require,

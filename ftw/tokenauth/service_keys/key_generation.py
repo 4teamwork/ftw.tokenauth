@@ -44,7 +44,7 @@ def create_client_id():
     return os.urandom(16).encode('hex')
 
 
-def create_service_key_pair(user_id, title, token_uri):
+def create_service_key_pair(user_id, title, token_uri, ip_range=None):
     """Create a service key pair (public and private keys) with metadata.
     """
     keypair = KeyGenerator().generate_rsa_key_pair()
@@ -56,6 +56,7 @@ def create_service_key_pair(user_id, title, token_uri):
         'issued': keypair['issued'],
         'user_id': user_id,
         'public_key': keypair['public_key'],
+        'ip_range': ip_range,
         'title': title,
         'token_uri': token_uri,
     }
