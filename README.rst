@@ -80,7 +80,8 @@ following steps need to be performed:
 
 A user that has already authenticated to Plone using regular means, and has
 the ``ftw.tokenauth: Manage own Service Keys`` permission, can issue service
-keys for their account via the ``@@manage-service-keys`` view.
+keys for their account via the ``@@manage-service-keys`` view
+(``Manage Service Keys`` action in personal tools menu).
 
 They need to issue a service key that is then displayed **exactly once** for
 download, and store the private key in a safe location accessible to the

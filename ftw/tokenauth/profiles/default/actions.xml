@@ -1,0 +1,20 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <object name="user" meta_type="CMF Action Category">
+
+    <object name="service-keys" meta_type="CMF Action" insert-before="logout" i18n:domain="ftw.tokenauth">
+      <property name="title" i18n:translate="">Manage Service Keys</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${portal_url}/@@manage-service-keys</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="ftw.tokenauth: Manage own Service Keys" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+</object>
