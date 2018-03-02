@@ -1,6 +1,7 @@
 from ftw.tokenauth.pas.storage import CredentialStorage
 from plone import api
 from Products.Five.browser import BrowserView
+from zope.globalrequest import getRequest
 
 
 class ManageServiceKeysView(BrowserView):
@@ -8,6 +9,10 @@ class ManageServiceKeysView(BrowserView):
     def __call__(self):
         acl_users = api.portal.get().acl_users
         self.plugin = acl_users['token_auth']
+
+        action = self.request.form.get('action')
+        if action == 'Revoke selected keys':
+            return self.revoke_selected_keys()
 
         self.request.set('disable_border', True)
         return self.index()
@@ -32,3 +37,14 @@ class ManageServiceKeysView(BrowserView):
             for key in users_keys]
 
         return key_infos
+
+    def revoke_selected_keys(self):
+        user_id = api.user.get_current().id
+        selected_keys = self.request.form.get('selected_keys', [])
+
+        storage = CredentialStorage(self.plugin)
+        for key_id in selected_keys:
+            storage.revoke_service_key(user_id, key_id)
+
+        api.portal.show_message('Keys revoked.', getRequest())
+        return self.request.RESPONSE.redirect(self.main_url)

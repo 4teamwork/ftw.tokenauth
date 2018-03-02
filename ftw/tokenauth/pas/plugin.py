@@ -194,7 +194,7 @@ class TokenAuthenticationPlugin(BasePlugin):
         received_token = credentials['access_token']
         storage = CredentialStorage(self)
 
-        # Reject unknown tokens
+        # Reject unknown or revoked tokens
         if not storage.contains_access_token(received_token):
             # TODO: Should we send an 'invalid_token' error response here?
             return None

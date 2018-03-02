@@ -152,6 +152,31 @@ class TestManageServiceKeysView(FunctionalTestCase):
             ['', 'Key 2', client_ids[1], 'May 05, 2018 12:45 PM', 'Edit'],  # noqa
             table[2])
 
+    @browsing
+    def test_revoking_key_via_manage_service_keys_view(self, browser):
+        service_key = create(Builder('service_key')
+                             .having(title='My key'))
+        transaction.commit()
+
+        storage = CredentialStorage(self.plugin)
+        users_keys = storage.list_service_keys(TEST_USER_ID)
+        self.assertEqual(1, len(users_keys))
+        stored_service_key = users_keys[0]
+
+        # Guard assertion - make sure the issued key is actually in storage
+        self.assertEqual(
+            service_key['key_id'], stored_service_key['key_id'])
+        self.assertEqual(
+            service_key['public_key'], stored_service_key['public_key'])
+
+        # Revoke the key
+        browser.login().open(view='@@manage-service-keys')
+        browser.fill({'My key': True})
+        browser.find('Revoke selected keys').click()
+
+        # Got removed from storage
+        self.assertEqual([], storage.list_service_keys(TEST_USER_ID))
+
 
 class TestEditServiceKeysView(FunctionalTestCase):
 

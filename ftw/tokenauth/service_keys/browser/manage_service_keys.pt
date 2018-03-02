@@ -57,6 +57,8 @@
                 Issue new service key
             </a>
 
+            <input id="revoke-key" name="action" class="submit-widget button-field destructive" value="Revoke selected keys" type="submit" />
+
         </form>
 
         <div class="visualClear"><!----></div>

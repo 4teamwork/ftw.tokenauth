@@ -76,6 +76,34 @@ class TestStorage(FunctionalTestCase):
 
         self.assertEqual(map(dict, keys_from_storage), users_keys)
 
+    def test_revoke_service_key(self):
+        storage = CredentialStorage(self.plugin)
+        service_key = create(Builder('service_key'))
+
+        self.assertIn(service_key['key_id'], storage._service_keys)
+        storage.revoke_service_key(TEST_USER_ID, service_key['key_id'])
+        self.assertNotIn(service_key['key_id'], storage._service_keys)
+
+    def test_revoking_service_key_removes_associated_tokens(self):
+        storage = CredentialStorage(self.plugin)
+
+        service_key = create(Builder('service_key'))
+        token = create(Builder('access_token')
+                       .from_key(service_key))['token']
+
+        self.assertTrue(storage.contains_access_token(token))
+
+        storage.revoke_service_key(TEST_USER_ID, service_key['key_id'])
+        self.assertFalse(storage.contains_access_token(token))
+
+    def test_user_id_must_match_key_to_be_revoked(self):
+        storage = CredentialStorage(self.plugin)
+        other_key = create(Builder('service_key').having(user_id='other.user'))
+
+        self.assertIn(other_key['key_id'], storage._service_keys)
+        with self.assertRaises(AssertionError):
+            storage.revoke_service_key(TEST_USER_ID, other_key['key_id'])
+
     def test_add_access_token(self):
         storage = CredentialStorage(self.plugin)
         access_token = create(Builder('access_token'))

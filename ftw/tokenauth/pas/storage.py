@@ -1,6 +1,7 @@
 from BTrees.OOBTree import OOBTree
 from operator import itemgetter
 from persistent.mapping import PersistentMapping
+from plone import api
 from Products.CMFPlone.utils import base_hasattr
 
 
@@ -84,6 +85,24 @@ class CredentialStorage(object):
             if k['user_id'] == user_id]
 
         return sorted(users_keys, key=itemgetter('issued'))
+
+    def revoke_service_key(self, user_id, key_id):
+        """Revoke the service_key identified by key_id.
+
+        Also removes any access tokens tied to this key.
+        """
+        key = self._service_keys[key_id]
+
+        assert key_id in self._service_keys
+        assert key['user_id'] == user_id
+        assert api.user.get_current().id == user_id
+
+        self._service_keys.pop(key_id)
+
+        # Remove any tokens tied to this key
+        for token, access_token in self._access_tokens.items():
+            if access_token['key_id'] == key_id:
+                del self._access_tokens[token]
 
     def add_access_token(self, access_token):
         """Store the given access_token (dict with raw token and metadata).
