@@ -6,12 +6,21 @@ version = '1.0.0.dev0'
 
 tests_require = [
     'unittest2',
+    'ftw.builder',
+    'ftw.testbrowser',
+    'ftw.testing',
+    'plone.app.testing',
+    'plone.rest',
+    'plone.restapi',
+    'requests',
+    'plone.testing',
+    'zope.configuration',
 ]
 
 
 setup(name='ftw.tokenauth',
       version=version,
-      description="Token authentication for Plone",
+      description="Token Authentication for Plone",
       long_description=open("README.rst").read() + "\n" + open(
           os.path.join("docs", "HISTORY.txt")).read(),
 
@@ -25,7 +34,7 @@ setup(name='ftw.tokenauth',
           'Topic :: Software Development :: Libraries :: Python Modules',
       ],
 
-      keywords='token authentication plone',
+      keywords='token authentication plone oauth2 jwt',
       author='4teamwork AG',
       author_email='mailto:info@4teamwork.ch',
       url='https://github.com/4teamwork/ftw.tokenauth',
@@ -39,6 +48,26 @@ setup(name='ftw.tokenauth',
 
       install_requires=[
           'setuptools',
+          # Plone / Zope dependencies
+          'AccessControl',
+          'Plone',
+          'plone.api',
+          'plone.supermodel',
+          'Products.CMFCore',
+          'Products.CMFPlone',
+          'Products.PluggableAuthService',
+          'z3c.form',
+          'zExceptions',
+          'ZODB3',
+          'zope.component',
+          'zope.globalrequest',
+          'zope.interface',
+          'zope.schema',
+          'Zope2',
+          # Other dependencies
+          'cryptography',
+          'ftw.profilehook',
+          'PyJWT',
       ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
