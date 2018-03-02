@@ -1,10 +1,16 @@
 from BTrees.OOBTree import OOBTree
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testing import freeze
 from ftw.tokenauth.pas.storage import CredentialStorage
 from ftw.tokenauth.tests import FunctionalTestCase
 from persistent.mapping import PersistentMapping
 from plone.app.testing import TEST_USER_ID
+from zExceptions import Unauthorized
+
+
+FROZEN_NOW = datetime.now()
 
 
 class TestStorage(FunctionalTestCase):
@@ -26,18 +32,25 @@ class TestStorage(FunctionalTestCase):
             storage._access_tokens,
             storage._storage[storage.ACCESS_TOKENS_KEY])
 
+        self.assertEqual(
+            storage._usage_logs,
+            storage._storage[storage.USAGE_LOGS_KEY])
+
         self.assertIsInstance(storage._service_keys, OOBTree)
         self.assertIsInstance(storage._access_tokens, OOBTree)
+        self.assertIsInstance(storage._usage_logs, OOBTree)
 
     def test_initialization_is_idempotent(self):
         storage = CredentialStorage(self.plugin)
         storage._service_keys['foo'] = 'bar'
         storage._access_tokens['foo'] = 'bar'
+        storage._usage_logs['foo'] = 'bar'
 
         # Multiple initializations shouldn't remove existing data
         storage._initialize_storage()
         self.assertEqual(storage._service_keys['foo'], 'bar')
         self.assertEqual(storage._access_tokens['foo'], 'bar')
+        self.assertEqual(storage._usage_logs['foo'], 'bar')
 
     def test_add_service_key(self):
         storage = CredentialStorage(self.plugin)
@@ -135,3 +148,78 @@ class TestStorage(FunctionalTestCase):
         self.assertTrue(storage.contains_access_token(token))
         del storage._access_tokens[token]
         self.assertFalse(storage.contains_access_token(token))
+
+    def test_log_access_token_creation(self):
+        storage = CredentialStorage(self.plugin)
+        service_key = create(Builder('service_key'))
+
+        self.request._client_addr = '192.168.1.1'
+        with freeze(datetime(2018, 1, 1, 15, 30)):
+            create(Builder('access_token').from_key(service_key))
+
+        self.assertEqual(
+            {service_key['key_id']: [
+                {'issued': datetime(2018, 1, 1, 15, 30),
+                 'ip_address': '192.168.1.1'}]},
+            dict(storage._usage_logs))
+
+    def test_get_usage_logs(self):
+        storage = CredentialStorage(self.plugin)
+        service_key = create(Builder('service_key'))
+
+        self.request._client_addr = '192.168.1.1'
+        with freeze(datetime(2018, 1, 10, 15, 30)) as clock:
+            create(Builder('access_token').from_key(service_key))
+            clock.backward(hours=1)
+            create(Builder('access_token').from_key(service_key))
+
+        # Should be ordered by 'issued'
+        self.assertEqual(
+            [
+                {'issued': datetime(2018, 1, 10, 14, 30),
+                 'ip_address': '192.168.1.1'},
+                {'issued': datetime(2018, 1, 10, 15, 30),
+                 'ip_address': '192.168.1.1'},
+            ],
+            storage.get_usage_logs(service_key['key_id']))
+
+    def test_cant_fetch_logs_for_other_users_key(self):
+        storage = CredentialStorage(self.plugin)
+        other_key = create(Builder('service_key').having(user_id='other.user'))
+        create(Builder('access_token').from_key(other_key))
+
+        with self.assertRaises(Unauthorized):
+            storage.get_usage_logs(other_key['key_id'])
+
+    def test_get_last_used(self):
+        storage = CredentialStorage(self.plugin)
+        service_key = create(Builder('service_key'))
+
+        self.request._client_addr = '192.168.1.1'
+        with freeze(datetime(2018, 1, 10, 15, 30)):
+            create(Builder('access_token').from_key(service_key))
+
+        self.assertEqual(
+            datetime(2018, 1, 10, 15, 30),
+            storage.get_last_used(service_key['key_id']))
+
+    def test_rotates_usage_logs(self):
+        storage = CredentialStorage(self.plugin)
+        service_key = create(Builder('service_key'))
+
+        with freeze(datetime(2018, 1, 10, 15, 30)) as clock:
+            # First one should be rotated (older than 7 days)
+            create(Builder('access_token').from_key(service_key))
+            clock.forward(days=10)
+            create(Builder('access_token').from_key(service_key))
+            clock.forward(hours=2)
+            create(Builder('access_token').from_key(service_key))
+
+        self.assertEqual(
+            {service_key['key_id']: [
+                {'issued': datetime(2018, 1, 20, 15, 30),
+                 'ip_address': ''},
+                {'issued': datetime(2018, 1, 20, 17, 30),
+                 'ip_address': ''},
+            ]},
+            dict(storage._usage_logs))

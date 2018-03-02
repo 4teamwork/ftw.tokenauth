@@ -112,6 +112,7 @@ class TokenAuthenticationPlugin(BasePlugin):
         }
 
         storage.add_access_token(access_token)
+        storage.log_access_token_creation(access_token)
         storage.clean_up_expired_tokens()
         return access_token
 

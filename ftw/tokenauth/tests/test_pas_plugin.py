@@ -5,7 +5,9 @@ from ftw.builder import create
 from ftw.testing import freeze
 from ftw.tokenauth.pas.storage import CredentialStorage
 from ftw.tokenauth.tests import FunctionalTestCase
+from plone.app.testing import login
 from plone.app.testing import TEST_USER_ID
+from zExceptions import Unauthorized
 import json
 
 
@@ -128,6 +130,18 @@ class TestTokenAuthPlugin(FunctionalTestCase):
             (TEST_USER_ID, TEST_USER_ID),
             self.plugin.authenticateCredentials(creds))
 
+    def test_issuing_access_token_logs_key_usage(self):
+        self.request._client_addr = '10.0.0.77'
+        with freeze(datetime(2018, 1, 1, 15, 30)):
+            access_token = create(Builder('access_token'))
+
+        storage = CredentialStorage(self.plugin)
+        usage_logs = storage.get_usage_logs(access_token['key_id'])
+        self.assertEqual(
+            [{'issued': datetime(2018, 1, 1, 15, 30),
+              'ip_address': '10.0.0.77'}],
+            usage_logs)
+
     def test_cleans_up_expired_tokens(self):
         storage = CredentialStorage(self.plugin)
 
@@ -147,3 +161,14 @@ class TestTokenAuthPlugin(FunctionalTestCase):
             token_3 = create(Builder('access_token'))['token']
             self.assertTrue(storage.contains_access_token(token_2))
             self.assertTrue(storage.contains_access_token(token_3))
+
+    def test_cant_fetch_usage_logs_for_other_users(self):
+        access_token = create(Builder('access_token'))
+
+        # Attempt to access usage logs for a key issued for a different user
+        john = create(Builder('user'))
+        login(self.layer['portal'], john.id)
+
+        storage = CredentialStorage(self.plugin)
+        with self.assertRaises(Unauthorized):
+            storage.get_usage_logs(access_token['key_id'])

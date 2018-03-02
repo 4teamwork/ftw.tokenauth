@@ -1,12 +1,17 @@
 from BTrees.OOBTree import OOBTree
+from datetime import datetime
+from datetime import timedelta
 from operator import itemgetter
+from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 from plone import api
 from Products.CMFPlone.utils import base_hasattr
+from zExceptions import Unauthorized
+from zope.globalrequest import getRequest
 
 
 class CredentialStorage(object):
-    """Storage abstraction for service keys and access tokens.
+    """Storage abstraction for service keys, access tokens, and usage logs.
 
     The storage's internal data structured are kept as attributes on the
     PAS plugin.
@@ -24,6 +29,9 @@ class CredentialStorage(object):
 
     SERVICE_KEYS_KEY = 'service_keys'
     ACCESS_TOKENS_KEY = 'access_tokens'
+    USAGE_LOGS_KEY = 'usage_logs'
+
+    USAGE_LOG_RETENTION_DAYS = 7
 
     def __init__(self, plugin):
         self.plugin = plugin
@@ -37,6 +45,7 @@ class CredentialStorage(object):
 
         self._service_keys = self._storage[self.SERVICE_KEYS_KEY]
         self._access_tokens = self._storage[self.ACCESS_TOKENS_KEY]
+        self._usage_logs = self._storage[self.USAGE_LOGS_KEY]
 
     def _initialize_storage(self):
         """Initialize internal data structures of the storage.
@@ -50,6 +59,9 @@ class CredentialStorage(object):
 
             if self.ACCESS_TOKENS_KEY not in _storage:
                 _storage[self.ACCESS_TOKENS_KEY] = OOBTree()
+
+            if self.USAGE_LOGS_KEY not in _storage:
+                _storage[self.USAGE_LOGS_KEY] = OOBTree()
 
     def add_service_key(self, service_key):
         """Store a service key (dict with public key and metadata).
@@ -128,9 +140,59 @@ class CredentialStorage(object):
         """
         return token in self._access_tokens
 
+    def log_access_token_creation(self, access_token):
+        """Write a usage_log entry for the issued access_token.
+
+        Also triggers rotation of usage logs older than retention period.
+        """
+        key_id = access_token['key_id']
+        if key_id not in self._usage_logs:
+            # TODO: Maybe use a BTree set here?
+            self._usage_logs[key_id] = PersistentList()
+
+        ip_address = getRequest().getClientAddr()
+        log_entry = PersistentMapping({
+            'issued': access_token['issued'],
+            'ip_address': ip_address})
+        self._usage_logs[key_id].append(log_entry)
+
+        self.rotate_usage_logs()
+
     def clean_up_expired_tokens(self):
         """Remove expired tokens from storage.
         """
         for token, access_token in self._access_tokens.items():
             if self.plugin.is_expired(access_token):
                 del self._access_tokens[token]
+
+    def get_last_used(self, key_id):
+        """Determine when the key was last used to issue an access token.
+        """
+        entries = self.get_usage_logs(key_id)
+        if entries:
+            return entries[-1]['issued']
+        return '(Never)'
+
+    def get_usage_logs(self, key_id):
+        """Get usage logs for the key identified by key_id.
+        """
+        current_user = api.user.get_current()
+        service_key = self.get_service_key(key_id)
+
+        # Only allow user to view logs for their own keys
+        if not service_key or service_key['user_id'] != current_user.id:
+            raise Unauthorized()
+
+        entries = sorted(self._usage_logs.get(key_id, []),
+                         key=itemgetter('issued'))
+        return entries
+
+    def rotate_usage_logs(self):
+        """Remove usage log entries older than retention period.
+        """
+        for entries in self._usage_logs.values():
+            for entry in entries:
+                issued = entry['issued']
+                max_age = timedelta(days=self.USAGE_LOG_RETENTION_DAYS)
+                if datetime.now() - issued > max_age:
+                    entries.remove(entry)

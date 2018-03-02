@@ -21,6 +21,10 @@ class ManageServiceKeysView(BrowserView):
     def main_url(self):
         return self.context.absolute_url() + '/@@manage-service-keys'
 
+    def get_last_used(self, key_id):
+        storage = CredentialStorage(self.plugin)
+        return storage.get_last_used(key_id)
+
     def get_key_infos(self):
         user_id = api.user.get_current().id
         storage = CredentialStorage(self.plugin)
@@ -34,7 +38,8 @@ class ManageServiceKeysView(BrowserView):
              'key_id': key['key_id'],
              'title': key['title'],
              'ip_range': key['ip_range'],
-             'issued': key['issued']}
+             'issued': key['issued'],
+             'last_used': self.get_last_used(key['key_id'])}
             for key in users_keys]
 
         return key_infos

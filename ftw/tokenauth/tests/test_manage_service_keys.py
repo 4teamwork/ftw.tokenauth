@@ -36,6 +36,9 @@ class TestManageServiceKeysView(FunctionalTestCase):
         with self.assertRaises(InsufficientPrivileges):
             browser.login().open(view='@@manage-service-keys-edit')
 
+        with self.assertRaises(InsufficientPrivileges):
+            browser.login().open(view='@@manage-service-keys-logs')
+
     @browsing
     def test_issuing_key_via_manage_service_keys_view(self, browser):
         browser.login().open(view='@@manage-service-keys')
@@ -183,13 +186,13 @@ class TestManageServiceKeysView(FunctionalTestCase):
         table = browser.css('#table-service-keys').first.lists()
 
         self.assertEquals(
-            ['', 'Title', 'Client-ID', 'IP Range', 'Issued', ''],
+            ['', 'Title', 'Client-ID', 'IP Range', 'Issued', 'Last Used', ''],
             table[0])
         self.assertEquals(
-            ['', 'Key 1', client_ids[0], '', 'Jan 01, 2017 03:30 PM', 'Edit'],  # noqa
+            ['', 'Key 1', client_ids[0], '', 'Jan 01, 2017 03:30 PM', '', 'Edit'],  # noqa
             table[1])
         self.assertEquals(
-            ['', 'Key 2', client_ids[1], '192.168.0.0/16', 'May 05, 2018 12:45 PM', 'Edit'],  # noqa
+            ['', 'Key 2', client_ids[1], '192.168.0.0/16', 'May 05, 2018 12:45 PM', '', 'Edit'],  # noqa
             table[2])
 
     @browsing
@@ -335,3 +338,39 @@ class TestEditServiceKeysView(FunctionalTestCase):
         browser.find('Cancel').click()
         self.assertEqual(['Edit cancelled'], info_messages())
         self.assertTrue(browser.url.endswith('@@manage-service-keys'))
+
+
+class TestUsageLogsView(FunctionalTestCase):
+
+    @browsing
+    def test_lists_usage_logs(self, browser):
+        # Create a service key and issue two access tokens with it
+        service_key = create(Builder('service_key'))
+        self.request._client_addr = '10.0.0.77'
+
+        with freeze(datetime(2018, 1, 1, 15, 30)):
+            create(Builder('access_token')
+                   .from_key(service_key))
+
+        with freeze(datetime(2018, 1, 5, 12, 45)):
+            create(Builder('access_token')
+                   .from_key(service_key))
+
+        transaction.commit()
+
+        browser.login().open(view='@@manage-service-keys')
+        keys_table = browser.css('#table-service-keys').first
+        self.assertEqual(
+            ['Jan 05, 2018 12:45 PM'],
+            keys_table.column('Last Used', head=False)
+        )
+
+        logs_link = keys_table.find('Jan 05, 2018 12:45 PM').css('a').first
+        logs_link.click()
+
+        logs_table = browser.css('#table-usage-logs').first
+        self.assertEqual(
+            [{'IP Address': '10.0.0.77', 'Time': 'Jan 01, 2018 03:30 PM'},
+             {'IP Address': '10.0.0.77', 'Time': 'Jan 05, 2018 12:45 PM'}],
+            logs_table.dicts()
+        )

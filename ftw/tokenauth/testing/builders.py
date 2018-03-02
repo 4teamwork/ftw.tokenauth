@@ -193,6 +193,8 @@ class AccessTokenBuilder(object):
         return self
 
     def issued(self, issued_at):
+        # Note: This does not currently affect the usage log entry for when
+        # this token gets issued. Should maybe drop this and use freezer.
         self.issued_at = issued_at
         return self
 

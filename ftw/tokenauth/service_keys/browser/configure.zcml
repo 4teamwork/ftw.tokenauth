@@ -26,4 +26,12 @@
       permission="ftw.tokenauth.ManageOwnServiceKeys"
       />
 
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="manage-service-keys-logs"
+      class=".view_usage_logs.ViewUsageLogs"
+      permission="ftw.tokenauth.ManageOwnServiceKeys"
+      template="view_usage_logs.pt"
+      />
+
 </configure>
