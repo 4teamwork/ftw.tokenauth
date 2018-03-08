@@ -339,6 +339,20 @@ class TestEditServiceKeysView(FunctionalTestCase):
         self.assertEqual(['Edit cancelled'], info_messages())
         self.assertTrue(browser.url.endswith('@@manage-service-keys'))
 
+    @browsing
+    def test_edit_key_form_doesnt_allow_editing_other_users_key(self, browser):
+        service_key = create(Builder('service_key')
+                             .having(title='Not my key',
+                                     user_id='other.user'))
+        transaction.commit()
+
+        edit_url = '%s/%s?key_id=%s' % (
+            self.portal.absolute_url(),
+            '@@manage-service-keys-edit', service_key['key_id'])
+
+        with self.assertRaises(InsufficientPrivileges):
+            browser.login().open(edit_url)
+
 
 class TestUsageLogsView(FunctionalTestCase):
 

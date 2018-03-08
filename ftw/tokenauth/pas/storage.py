@@ -63,6 +63,15 @@ class CredentialStorage(object):
             if self.USAGE_LOGS_KEY not in _storage:
                 _storage[self.USAGE_LOGS_KEY] = OOBTree()
 
+    def _assert_current_user_owns_key(self, key_id):
+        """Verify that the currently logged in user owns the given key.
+        """
+        current_user = api.user.get_current()
+        service_key = self.get_service_key(key_id, unrestricted=True)
+
+        if not service_key or service_key['user_id'] != current_user.id:
+            raise Unauthorized()
+
     def add_service_key(self, service_key):
         """Store a service key (dict with public key and metadata).
         """
@@ -70,9 +79,15 @@ class CredentialStorage(object):
         self._service_keys[key_id] = PersistentMapping(service_key)
         return key_id
 
-    def get_service_key(self, key_id):
+    def get_service_key(self, key_id, unrestricted=False):
         """Return the service key identified by key_id.
+
+        Unless invoked with unrestricted=True, this method only allows to
+        fetch service keys for the current user.
         """
+        if not unrestricted:
+            self._assert_current_user_owns_key(key_id)
+
         return self._service_keys[key_id]
 
     def get_service_key_for_client_id(self, client_id, user_id):
@@ -98,11 +113,17 @@ class CredentialStorage(object):
 
         return sorted(users_keys, key=itemgetter('issued'))
 
-    def revoke_service_key(self, user_id, key_id):
+    def revoke_service_key(self, user_id, key_id, unrestricted=False):
         """Revoke the service_key identified by key_id.
 
         Also removes any access tokens tied to this key.
+
+        Unless invoked with unrestricted=True, this method only allows
+        revocation of keys belonging to the currently logged in user.
         """
+        if not unrestricted:
+            self._assert_current_user_owns_key(key_id)
+
         key = self._service_keys[key_id]
 
         assert key_id in self._service_keys
@@ -120,7 +141,7 @@ class CredentialStorage(object):
         """Store the given access_token (dict with raw token and metadata).
         """
         # Verify that service key exists
-        assert self.get_service_key(access_token['key_id'])
+        assert self.get_service_key(access_token['key_id'], unrestricted=True)
 
         # The raw token itself isn't stored in metadata, just used as a key
         token = access_token['token']
@@ -165,23 +186,25 @@ class CredentialStorage(object):
             if self.plugin.is_expired(access_token):
                 del self._access_tokens[token]
 
-    def get_last_used(self, key_id):
+    def get_last_used(self, key_id, unrestricted=False):
         """Determine when the key was last used to issue an access token.
+
+        Unless invoked with unrestricted=True, this method only allows to
+        fetch the last used date for keys belonging to the current user.
         """
-        entries = self.get_usage_logs(key_id)
+        entries = self.get_usage_logs(key_id, unrestricted=unrestricted)
         if entries:
             return entries[-1]['issued']
         return '(Never)'
 
-    def get_usage_logs(self, key_id):
+    def get_usage_logs(self, key_id, unrestricted=False):
         """Get usage logs for the key identified by key_id.
-        """
-        current_user = api.user.get_current()
-        service_key = self.get_service_key(key_id)
 
-        # Only allow user to view logs for their own keys
-        if not service_key or service_key['user_id'] != current_user.id:
-            raise Unauthorized()
+        Unless invoked with unrestricted=True, this method only allows to
+        retrieve usage logs for keys belonging to the current user.
+        """
+        if not unrestricted:
+            self._assert_current_user_owns_key(key_id)
 
         entries = sorted(self._usage_logs.get(key_id, []),
                          key=itemgetter('issued'))

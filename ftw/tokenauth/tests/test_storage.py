@@ -109,12 +109,12 @@ class TestStorage(FunctionalTestCase):
         storage.revoke_service_key(TEST_USER_ID, service_key['key_id'])
         self.assertFalse(storage.contains_access_token(token))
 
-    def test_user_id_must_match_key_to_be_revoked(self):
+    def test_cant_revoke_other_users_keys(self):
         storage = CredentialStorage(self.plugin)
         other_key = create(Builder('service_key').having(user_id='other.user'))
 
         self.assertIn(other_key['key_id'], storage._service_keys)
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(Unauthorized):
             storage.revoke_service_key(TEST_USER_ID, other_key['key_id'])
 
     def test_add_access_token(self):

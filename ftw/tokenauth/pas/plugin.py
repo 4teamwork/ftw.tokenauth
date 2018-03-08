@@ -219,7 +219,8 @@ class TokenAuthenticationPlugin(BasePlugin):
             return None
 
         # Fetch service key that the token was tied to (by us)
-        service_key = storage.get_service_key(stored_access_token['key_id'])
+        service_key = storage.get_service_key(
+            stored_access_token['key_id'], unrestricted=True)
 
         ip_range = service_key['ip_range']
         if ip_range is not None:
