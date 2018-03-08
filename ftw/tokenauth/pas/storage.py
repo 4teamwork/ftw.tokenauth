@@ -211,11 +211,16 @@ class CredentialStorage(object):
         return entries
 
     def rotate_usage_logs(self):
-        """Remove usage log entries older than retention period.
+        """Clean out expired usage log entries.
+
+        Usage log entries older than retention period will be removed, except
+        the most recent entry, which will always be kept.
         """
-        for entries in self._usage_logs.values():
+        for key_id, entries in self._usage_logs.items():
+            last_used = self.get_last_used(key_id, unrestricted=True)
             for entry in entries:
                 issued = entry['issued']
                 max_age = timedelta(days=self.USAGE_LOG_RETENTION_DAYS)
-                if datetime.now() - issued > max_age:
+                # If entry is expired and not the most recent one, remove it
+                if datetime.now() - issued > max_age and issued != last_used:
                     entries.remove(entry)

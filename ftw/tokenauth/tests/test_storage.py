@@ -223,3 +223,22 @@ class TestStorage(FunctionalTestCase):
                  'ip_address': ''},
             ]},
             dict(storage._usage_logs))
+
+    def test_rotate_usage_logs_never_removes_most_recent_entry(self):
+        storage = CredentialStorage(self.plugin)
+        service_key = create(Builder('service_key'))
+
+        with freeze(datetime(2018, 1, 10, 15, 30)) as clock:
+            # Expired enty, but shouldn't be rotated because it's the most
+            # recent one
+            create(Builder('access_token').from_key(service_key))
+
+            clock.forward(days=60)
+            storage.rotate_usage_logs()
+
+        self.assertEqual(
+            {service_key['key_id']: [
+                {'issued': datetime(2018, 1, 10, 15, 30),
+                 'ip_address': ''},
+            ]},
+            dict(storage._usage_logs))

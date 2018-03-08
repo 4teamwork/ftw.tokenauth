@@ -19,7 +19,13 @@
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
 
-            <h2>Uses of this key to issue access tokens in last 7 days</h2>
+            <h2>Recent uses of this key</h2>
+            <p class="discreet">
+                A "use" of the key constitutes using it to issue an access token.
+                This table lists uses of this key that happened in the last
+                <strong>7 days</strong>, or that are the <strong>most
+                recent use</strong> of the key.
+           </p>
             <table class="listing" id="table-usage-logs">
                 <thead>
                     <tr>
