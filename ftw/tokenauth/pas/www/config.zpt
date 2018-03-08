@@ -17,6 +17,13 @@
           <td><input type="text" name="access_token_lifetime"
                      tal:attributes="value context/access_token_lifetime"/></td>
         </tr>
+        <tr valign="top">
+          <td><div class="form-label">Usage Log Retention Period</div>
+          <div class="form-help">How long key usage logs are kept (in days)</div>
+          </td>
+          <td><input type="text" name="usage_log_retention_days"
+                     tal:attributes="value context/usage_log_retention_days"/></td>
+        </tr>
         <tr>
           <td colspan="2">
             <div class="form-element">

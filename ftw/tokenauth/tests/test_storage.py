@@ -242,3 +242,21 @@ class TestStorage(FunctionalTestCase):
                  'ip_address': ''},
             ]},
             dict(storage._usage_logs))
+
+    def test_respects_custom_usage_log_retention_period(self):
+        storage = CredentialStorage(self.plugin)
+        service_key = create(Builder('service_key'))
+
+        self.plugin.usage_log_retention_days = 30
+
+        with freeze(datetime(2018, 1, 10, 15, 30)) as clock:
+            # First one would be rotated with default settings (7 days),
+            # but shouldn't with a higher setting of 30 days
+            create(Builder('access_token').from_key(service_key))
+            clock.forward(days=10)
+            create(Builder('access_token').from_key(service_key))
+
+        self.assertIn(
+            {'issued': datetime(2018, 1, 10, 15, 30),
+             'ip_address': ''},
+            dict(storage._usage_logs)[service_key['key_id']])

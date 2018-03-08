@@ -25,6 +25,10 @@
           <td><input type="text" name="access_token_lifetime" tal:attributes="value request/access_token_lifetime|string:3600"/></td>
         </tr>
         <tr>
+          <td class="form-label">Usage Log Retention Period (in days)</td>
+          <td><input type="text" name="usage_log_retention_days" tal:attributes="value request/usage_log_retention_days|string:7"/></td>
+        </tr>
+        <tr>
           <td colspan="2">
             <div class="form-element">
               <input type="submit" value="Add"/>

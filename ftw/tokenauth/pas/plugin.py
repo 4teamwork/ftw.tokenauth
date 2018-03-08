@@ -22,6 +22,7 @@ import os
 
 
 DEFAULT_TOKEN_LIFETIME = 3600
+DEFAULT_USAGE_LOG_RETENTION_DAYS = 7
 
 log = getLogger(__name__)
 
@@ -31,10 +32,13 @@ manage_addTokenAuthenticationPlugin = PageTemplateFile(
 
 
 def addTokenAuthenticationPlugin(self, id_, title=None,
-                                 access_token_lifetime=None, REQUEST=None):
+                                 access_token_lifetime=None,
+                                 usage_log_retention_days=None,
+                                 REQUEST=None):
     """Add a token authentication plugin
     """
-    plugin = TokenAuthenticationPlugin(id_, title, access_token_lifetime)
+    plugin = TokenAuthenticationPlugin(
+        id_, title, access_token_lifetime, usage_log_retention_days)
     self._setObject(plugin.getId(), plugin)
 
     if REQUEST is not None:
@@ -69,13 +73,18 @@ class TokenAuthenticationPlugin(BasePlugin):
     manage_config = PageTemplateFile('www/config', globals(),
                                      __name__='manage_config')
 
-    def __init__(self, id_, title=None, access_token_lifetime=None):
+    def __init__(self, id_, title=None, access_token_lifetime=None,
+                 usage_log_retention_days=None):
         self._setId(id_)
         self.title = title
 
         self.access_token_lifetime = DEFAULT_TOKEN_LIFETIME
         if access_token_lifetime:
             self.access_token_lifetime = int(access_token_lifetime)
+
+        self.usage_log_retention_days = DEFAULT_USAGE_LOG_RETENTION_DAYS
+        if usage_log_retention_days:
+            self.usage_log_retention_days = int(usage_log_retention_days)
 
         # Initialize storage
         CredentialStorage(self)
@@ -263,6 +272,9 @@ class TokenAuthenticationPlugin(BasePlugin):
 
         self.access_token_lifetime = int(REQUEST.form.get(
             'access_token_lifetime', DEFAULT_TOKEN_LIFETIME))
+
+        self.usage_log_retention_days = int(REQUEST.form.get(
+            'usage_log_retention_days', DEFAULT_USAGE_LOG_RETENTION_DAYS))
 
         response.redirect('%s/manage_config?manage_tabs_message=%s' %
                           (self.absolute_url(), 'Configuration+updated.'))

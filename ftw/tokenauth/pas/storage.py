@@ -31,8 +31,6 @@ class CredentialStorage(object):
     ACCESS_TOKENS_KEY = 'access_tokens'
     USAGE_LOGS_KEY = 'usage_logs'
 
-    USAGE_LOG_RETENTION_DAYS = 7
-
     def __init__(self, plugin):
         self.plugin = plugin
 
@@ -220,7 +218,7 @@ class CredentialStorage(object):
             last_used = self.get_last_used(key_id, unrestricted=True)
             for entry in entries:
                 issued = entry['issued']
-                max_age = timedelta(days=self.USAGE_LOG_RETENTION_DAYS)
+                max_age = timedelta(days=self.plugin.usage_log_retention_days)
                 # If entry is expired and not the most recent one, remove it
                 if datetime.now() - issued > max_age and issued != last_used:
                     entries.remove(entry)
