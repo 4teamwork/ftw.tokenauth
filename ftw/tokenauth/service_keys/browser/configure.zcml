@@ -1,0 +1,37 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="ftw.tokenauth">
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="manage-service-keys"
+      class=".manage_service_keys.ManageServiceKeysView"
+      permission="ftw.tokenauth.ManageOwnServiceKeys"
+      template="manage_service_keys.pt"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="manage-service-keys-issue"
+      class=".issue.IssueKeyForm"
+      permission="ftw.tokenauth.ManageOwnServiceKeys"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="manage-service-keys-edit"
+      class=".edit.EditKeyForm"
+      permission="ftw.tokenauth.ManageOwnServiceKeys"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="manage-service-keys-logs"
+      class=".view_usage_logs.ViewUsageLogs"
+      permission="ftw.tokenauth.ManageOwnServiceKeys"
+      template="view_usage_logs.pt"
+      />
+
+</configure>

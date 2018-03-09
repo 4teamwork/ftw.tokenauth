@@ -1,0 +1,79 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="ftw.tokenauth">
+
+<body>
+
+<metal:main fill-slot="main">
+
+    <tal:main-macro metal:define-macro="main">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading">Manage Service Keys</h1>
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <form tal:attributes="action string:${context/absolute_url}/@@manage-service-keys" method="POST">
+
+            <h2>Service Keys</h2>
+            <table class="listing" id="table-service-keys">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Title</th>
+                        <th>Client-ID</th>
+                        <th>IP Range</th>
+                        <th>Issued</th>
+                        <th>Last Used</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
+                    <tr tal:repeat="key_info view/get_key_infos">
+                        <td>
+                            <input type="checkbox" name="selected_keys:list"
+                                   tal:attributes="id string:select-${key_info/key_id};
+                                                   value string:${key_info/key_id}" />
+                        </td>
+                        <td><label tal:content="key_info/title"
+                                   tal:attributes="for string:select-${key_info/key_id}" /></td>
+                        <td tal:content="key_info/client_id" />
+                        <td tal:content="key_info/ip_range" />
+                        <td tal:content="python:toLocalizedTime(key_info['issued'], long_format=1)"/>
+                        <td>
+                            <a tal:attributes="href string:${context/absolute_url}/@@manage-service-keys-logs?key_id=${key_info/key_id}"
+                               tal:content="python:toLocalizedTime(key_info['last_used'], long_format=1)" />
+                        </td>
+                        <td>
+                            <a tal:attributes="href string:${context/absolute_url}/@@manage-service-keys-edit?key_id=${key_info/key_id}">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <br />
+
+            <a class="button context" tal:attributes="href string:${context/absolute_url}/@@manage-service-keys-issue">
+                Issue new service key
+            </a>
+
+            <input id="revoke-key" name="action" class="submit-widget button-field destructive" value="Revoke selected keys" type="submit" />
+
+        </form>
+
+        <div class="visualClear"><!----></div>
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+        <div class="visualClear"><!----></div>
+
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

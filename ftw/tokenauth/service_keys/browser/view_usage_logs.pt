@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="ftw.tokenauth">
+
+<body>
+
+<metal:main fill-slot="main">
+
+    <tal:main-macro metal:define-macro="main">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading">Usage logs for key "<span tal:content="options/key_title"/>"</h1>
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+
+            <h2>Recent uses of this key</h2>
+            <p class="discreet">
+                A "use" of the key constitutes using it to issue an access token.
+                This table lists uses of this key that happened in the last
+                <strong>7 days</strong>, or that are the <strong>most
+                recent use</strong> of the key.
+           </p>
+            <table class="listing" id="table-usage-logs">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>IP Address</th>
+                    </tr>
+                </thead>
+                <tbody tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
+                    <tr tal:repeat="entry view/get_usage_logs">
+                        <td tal:content="python:toLocalizedTime(entry['issued'], long_format=1)" />
+                        <td tal:content="entry/ip_address" />
+                    </tr>
+                </tbody>
+            </table>
+
+        <div class="visualClear"><!----></div>
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+        <div class="visualClear"><!----></div>
+
+        <br />
+        <a class="button" tal:attributes="href string:${context/absolute_url}/@@manage-service-keys">&lt; Back to manage service keys</a>
+
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

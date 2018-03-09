@@ -1,0 +1,7 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="plone.restapi">
+
+  <permission id="ftw.tokenauth.ManageOwnServiceKeys" title="ftw.tokenauth: Manage own Service Keys" />
+
+</configure>
