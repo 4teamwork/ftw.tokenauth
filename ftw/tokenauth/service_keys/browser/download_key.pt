@@ -3,7 +3,8 @@
     xmlns:metal="http://xml.zope.org/namespaces/metal"
     xmlns:tal="http://xml.zope.org/namespaces/tal"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    metal:use-macro="context/main_template/macros/master">
+    metal:use-macro="context/main_template/macros/master"
+    i18n:domain="ftw.tokenauth">
 
   <metal:head metal:fill-slot="head_slot">
     <style>
@@ -30,11 +31,14 @@
       />
 
   <metal:title fill-slot="content-title">
-    <h1 class="documentFirstHeading"><span class="fa fa-lock" />&nbsp;Download Service Key</h1>
+    <h1 class="documentFirstHeading">
+        <span class="fa fa-lock" />
+        <span i18n:translate="">Download Service Key</span>
+    </h1>
   </metal:title>
 
   <metal:content fill-slot="content-core">
-    <p>Download your Service Key</p>
+    <p i18n:translate="">Download your service key.</p>
 
     <h2 tal:content="options/title">Key Title</h2>
 
@@ -42,7 +46,7 @@
 
   <br />
   <a class="button" tal:attributes="href string:${context/absolute_url}/@@manage-service-keys">
-      &lt;&lt; Back to [Manage Service Keys]
+      &lt; <span i18n:translate="">Back to [Manage Service Keys]</span>
   </a>
 
   </metal:content>

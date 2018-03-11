@@ -85,7 +85,7 @@ class TestManageServiceKeysView(FunctionalTestCase):
         self.assertEqual(1, len(storage.list_service_keys(TEST_USER_ID)))
         key = storage.list_service_keys(TEST_USER_ID)[0]
 
-        self.assertTrue('Download your Service Key' in browser.contents)
+        self.assertTrue('Download your service key.' in browser.contents)
         self.assertTrue('My new key' in browser.contents)
 
         json_keyfile = browser.css('.json-keyfile').first
