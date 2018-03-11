@@ -235,7 +235,7 @@ class TestEditServiceKeysView(FunctionalTestCase):
         browser.fill({
             'Title': 'New title',
             'IP Range': '10.0.0.0/24',
-        }).find('Apply').click()
+        }).find('Save').click()
 
         self.assertEqual(['Data successfully updated.'], info_messages())
 
@@ -261,7 +261,7 @@ class TestEditServiceKeysView(FunctionalTestCase):
         browser.fill({
             'Title': '',
             'IP Range': '10.0.5.5/24',
-        }).find('Apply').click()
+        }).find('Save').click()
 
         self.assertEqual(['There were some errors.'], error_messages())
 
@@ -295,7 +295,7 @@ class TestEditServiceKeysView(FunctionalTestCase):
         browser.fill({
             'Title': '',
             'IP Range': '10.0.5.5/24',
-        }).find('Apply').click()
+        }).find('Save').click()
 
         self.assertEqual(['There were some errors.'], error_messages())
 
@@ -311,7 +311,7 @@ class TestEditServiceKeysView(FunctionalTestCase):
             [('form.widgets.ip_range', '10.0.5.5/24'),
              ('form.widgets.title', ''),
              ('form.buttons.cancel', 'Cancel'),
-             ('form.buttons.apply', 'Apply')],
+             ('form.buttons.save', 'Save')],
             form.values.items())
 
     @browsing
@@ -323,7 +323,7 @@ class TestEditServiceKeysView(FunctionalTestCase):
         edit_link = browser.css('#table-service-keys tr')[-1].find('Edit')
         edit_link.click()
 
-        browser.find('Apply').click()
+        browser.find('Save').click()
         self.assertEqual(['No changes were applied.'], info_messages())
 
     @browsing

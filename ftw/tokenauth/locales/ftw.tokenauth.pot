@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-11 12:42+0000\n"
+"POT-Creation-Date: 2018-03-11 12:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,7 @@ msgstr ""
 msgid "Allowed IP range specification in <strong><a href=\"https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation\">CIDR notation</a></strong>."
 msgstr ""
 
+#: ./ftw/tokenauth/service_keys/browser/edit.py:90
 #: ./ftw/tokenauth/service_keys/browser/issue.py:59
 msgid "Cancel"
 msgstr ""
@@ -28,6 +29,14 @@ msgstr ""
 
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:53
 msgid "Edit"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/edit.py:16
+msgid "Edit Service Key"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/edit.py:92
+msgid "Edit cancelled"
 msgstr ""
 
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:30
@@ -77,6 +86,10 @@ msgstr ""
 #: ./ftw/tokenauth/profiles/default/actions.xml
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:17
 msgid "Manage Service Keys"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/edit.py:77
+msgid "Save"
 msgstr ""
 
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:23
