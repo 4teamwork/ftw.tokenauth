@@ -14,22 +14,22 @@
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-        <h1 class="documentFirstHeading">Manage Service Keys</h1>
+        <h1 class="documentFirstHeading" i18n:translate="">Manage Service Keys</h1>
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
         <form tal:attributes="action string:${context/absolute_url}/@@manage-service-keys" method="POST">
 
-            <h2>Service Keys</h2>
+            <h2 i18n:translate="">Service Keys</h2>
             <table class="listing" id="table-service-keys">
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Title</th>
-                        <th>Client-ID</th>
-                        <th>IP Range</th>
-                        <th>Issued</th>
-                        <th>Last Used</th>
+                        <th i18n:translate="">Title</th>
+                        <th i18n:translate="">Client-ID</th>
+                        <th i18n:translate="">IP Range</th>
+                        <th i18n:translate="">Issued</th>
+                        <th i18n:translate="">Last Used</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -50,7 +50,8 @@
                                tal:content="python:toLocalizedTime(key_info['last_used'], long_format=1)" />
                         </td>
                         <td>
-                            <a tal:attributes="href string:${context/absolute_url}/@@manage-service-keys-edit?key_id=${key_info/key_id}">
+                            <a tal:attributes="href string:${context/absolute_url}/@@manage-service-keys-edit?key_id=${key_info/key_id}"
+                               i18n:translate="">
                                 Edit
                             </a>
                         </td>
@@ -60,11 +61,15 @@
 
             <br />
 
-            <a class="button context" tal:attributes="href string:${context/absolute_url}/@@manage-service-keys-issue">
+            <a class="button context"
+               tal:attributes="href string:${context/absolute_url}/@@manage-service-keys-issue"
+               i18n:translate="">
                 Issue new service key
             </a>
 
-            <input id="revoke-key" name="action" class="submit-widget button-field destructive" value="Revoke selected keys" type="submit" />
+            <input id="revoke-keys" name="action-revoke-keys" class="submit-widget button-field destructive"
+                   value="Revoke selected keys" type="submit"
+                   i18n:attributes="value label_revoke_selected_keys" />
 
         </form>
 

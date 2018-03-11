@@ -1,0 +1,176 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2018-03-11 14:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:49
+msgid "Allowed IP range specification in <strong><a href=\"https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation\">CIDR notation</a></strong>."
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/download_key.pt:49
+msgid "Back to [Manage Service Keys]"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/edit.py:90
+#: ./ftw/tokenauth/service_keys/browser/issue.py:59
+msgid "Cancel"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:29
+msgid "Client-ID"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/download_key.pt:36
+msgid "Download Service Key"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/download_key.pt:41
+msgid "Download your service key."
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:53
+msgid "Edit"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/edit.py:16
+msgid "Edit Service Key"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/edit.py:92
+msgid "Edit cancelled"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:37
+msgid "IP Address"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:30
+msgid "IP Range"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:17
+msgid "Invalid IP range: ${ip_range_error}"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/issue.py:31
+msgid "Issue Service Key"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/issue.py:32
+msgid "Issue a key to be used for authentication by a service application"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/issue.py:39
+msgid "Issue key"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:64
+msgid "Issue new service key"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:31
+msgid "Issued"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/issue.py:55
+msgid "Key created: ${key_id}"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/issue.py:62
+msgid "Key creation cancelled."
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.py:55
+msgid "Keys revoked."
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:32
+msgid "Last Used"
+msgstr ""
+
+#: ./ftw/tokenauth/profiles/default/actions.xml
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:17
+msgid "Manage Service Keys"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:22
+msgid "Recent uses of this key"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/edit.py:77
+msgid "Save"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:23
+msgid "Service Keys"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:28
+msgid "The <strong>most recent</strong> use of a key is always displayed (whether or not it falls into that time window)."
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:36
+msgid "Time"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:28
+msgid "Title"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:17
+msgid "Usage logs for key \"${key_title}\""
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:26
+msgid "Uses of this key to issue access tokens in the <strong>last ${retention_days} days</strong>."
+msgstr ""
+
+#: ./ftw/tokenauth/configure.zcml:31
+msgid "ftw.tokenauth : uninstall"
+msgstr ""
+
+#: ./ftw/tokenauth/configure.zcml:23
+msgid "ftw.tokenauth default"
+msgstr ""
+
+#. Default: "IP Range"
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:46
+msgid "label_ip_range"
+msgstr ""
+
+#. Default: "Issued"
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:41
+msgid "label_issued"
+msgstr ""
+
+#. Default: "Key ID"
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:31
+msgid "label_key_id"
+msgstr ""
+
+#. Default: "Revoke selected keys"
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:70
+msgid "label_revoke_selected_keys"
+msgstr ""
+
+#. Default: "Title"
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:27
+msgid "label_title"
+msgstr ""
+
+#. Default: "User ID"
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:36
+msgid "label_user_id"
+msgstr ""
+

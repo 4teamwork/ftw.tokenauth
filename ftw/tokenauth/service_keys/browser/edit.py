@@ -1,3 +1,4 @@
+from ftw.tokenauth import _
 from ftw.tokenauth.pas.storage import CredentialStorage
 from ftw.tokenauth.service_keys.browser.base_form import BaseForm
 from ftw.tokenauth.service_keys.browser.base_form import IKeyMetadataSchema
@@ -12,8 +13,7 @@ from zope.globalrequest import getRequest
 
 class EditKeyForm(BaseForm):
 
-    label = u'Edit Service Key'
-    description = u'Edit service key'
+    label = _(u'Edit Service Key')
 
     successMessage = Z3CFormMF('Data successfully updated.')
     noChangesMessage = Z3CFormMF('No changes were applied.')
@@ -24,7 +24,7 @@ class EditKeyForm(BaseForm):
         super(EditKeyForm, self).updateWidgets(*args, **kwargs)
 
         # Hack to retain widget values on validation error
-        if 'form.buttons.apply' not in self.request:
+        if 'form.buttons.save' not in self.request:
             # Prefill form
             key = self.get_key()
             for widget in self.widgets.values():
@@ -74,7 +74,7 @@ class EditKeyForm(BaseForm):
 
         return changes
 
-    @button.buttonAndHandler(Z3CFormMF('Apply'), name='apply')
+    @button.buttonAndHandler(_(u'Save'), name='save')
     def handleApply(self, action):
         data, errors = self.extractData()
         if errors:
@@ -87,7 +87,7 @@ class EditKeyForm(BaseForm):
             api.portal.show_message(self.noChangesMessage, getRequest())
         return self.request.RESPONSE.redirect(self.main_url)
 
-    @button.buttonAndHandler(u'Cancel')
+    @button.buttonAndHandler(_(u'Cancel'), name='cancel')
     def handleCancel(self, action):
-        api.portal.show_message('Edit cancelled', getRequest())
+        api.portal.show_message(_('Edit cancelled'), getRequest())
         return self.request.RESPONSE.redirect(self.main_url)

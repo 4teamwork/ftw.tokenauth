@@ -85,7 +85,7 @@ class TestManageServiceKeysView(FunctionalTestCase):
         self.assertEqual(1, len(storage.list_service_keys(TEST_USER_ID)))
         key = storage.list_service_keys(TEST_USER_ID)[0]
 
-        self.assertTrue('Download your Service Key' in browser.contents)
+        self.assertTrue('Download your service key.' in browser.contents)
         self.assertTrue('My new key' in browser.contents)
 
         json_keyfile = browser.css('.json-keyfile').first
@@ -150,7 +150,7 @@ class TestManageServiceKeysView(FunctionalTestCase):
         self.assertEqual(['There were some errors.'], error_messages())
 
         self.assertEqual(
-            {'IP Range':
+            {'IP Range Allowed IP range specification in CIDR notation.':
                 ['Invalid IP range: 192.168.5.5/16 has host bits set']},
             erroneous_fields(browser.forms['form']))
 
@@ -235,7 +235,7 @@ class TestEditServiceKeysView(FunctionalTestCase):
         browser.fill({
             'Title': 'New title',
             'IP Range': '10.0.0.0/24',
-        }).find('Apply').click()
+        }).find('Save').click()
 
         self.assertEqual(['Data successfully updated.'], info_messages())
 
@@ -261,12 +261,12 @@ class TestEditServiceKeysView(FunctionalTestCase):
         browser.fill({
             'Title': '',
             'IP Range': '10.0.5.5/24',
-        }).find('Apply').click()
+        }).find('Save').click()
 
         self.assertEqual(['There were some errors.'], error_messages())
 
         self.assertEqual(
-            {'IP Range':
+            {'IP Range Allowed IP range specification in CIDR notation.':
                 ['Invalid IP range: 10.0.5.5/24 has host bits set'],
              'Title':
                 ['Required input is missing.']},
@@ -295,12 +295,12 @@ class TestEditServiceKeysView(FunctionalTestCase):
         browser.fill({
             'Title': '',
             'IP Range': '10.0.5.5/24',
-        }).find('Apply').click()
+        }).find('Save').click()
 
         self.assertEqual(['There were some errors.'], error_messages())
 
         self.assertEqual(
-            {'IP Range':
+            {'IP Range Allowed IP range specification in CIDR notation.':
                 ['Invalid IP range: 10.0.5.5/24 has host bits set'],
              'Title':
                 ['Required input is missing.']},
@@ -311,7 +311,7 @@ class TestEditServiceKeysView(FunctionalTestCase):
             [('form.widgets.ip_range', '10.0.5.5/24'),
              ('form.widgets.title', ''),
              ('form.buttons.cancel', 'Cancel'),
-             ('form.buttons.apply', 'Apply')],
+             ('form.buttons.save', 'Save')],
             form.values.items())
 
     @browsing
@@ -323,7 +323,7 @@ class TestEditServiceKeysView(FunctionalTestCase):
         edit_link = browser.css('#table-service-keys tr')[-1].find('Edit')
         edit_link.click()
 
-        browser.find('Apply').click()
+        browser.find('Save').click()
         self.assertEqual(['No changes were applied.'], info_messages())
 
     @browsing

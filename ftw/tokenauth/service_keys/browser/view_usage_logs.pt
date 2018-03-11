@@ -14,23 +14,27 @@
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-        <h1 class="documentFirstHeading">Usage logs for key "<span tal:content="options/key_title"/>"</h1>
+        <h1 class="documentFirstHeading" i18n:translate="">Usage logs for key "<span i18n:name="key_title" tal:content="options/key_title"/>"</h1>
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
 
-            <h2>Recent uses of this key</h2>
+            <h2 i18n:translate="">Recent uses of this key</h2>
             <p class="discreet">
-                A "use" of the key constitutes using it to issue an access token.
-                This table lists uses of this key that happened in the last
-                <strong>7 days</strong>, or that are the <strong>most
-                recent use</strong> of the key.
+                <span i18n:translate="">
+                    Uses of this key to issue access tokens in the
+                    <strong>last <span i18n:name="retention_days" tal:content="options/usage_log_retention_days">7</span> days</strong>.
+                </span><br/>
+                <span i18n:translate="">
+                    The <strong>most recent</strong> use of a key is always
+                    displayed (whether or not it falls into that time window).
+                </span>
            </p>
             <table class="listing" id="table-usage-logs">
                 <thead>
                     <tr>
-                        <th>Time</th>
-                        <th>IP Address</th>
+                        <th i18n:translate="">Time</th>
+                        <th i18n:translate="">IP Address</th>
                     </tr>
                 </thead>
                 <tbody tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
@@ -46,7 +50,10 @@
         <div class="visualClear"><!----></div>
 
         <br />
-        <a class="button" tal:attributes="href string:${context/absolute_url}/@@manage-service-keys">&lt; Back to manage service keys</a>
+
+        <a class="button" tal:attributes="href string:${context/absolute_url}/@@manage-service-keys">
+            &lt; <span i18n:translate="">Back to [Manage Service Keys]</span>
+        </a>
 
     </tal:main-macro>
 </metal:main>

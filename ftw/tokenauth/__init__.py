@@ -1,6 +1,10 @@
 from AccessControl.Permissions import add_user_folders
 from ftw.tokenauth.pas import plugin
 from Products.PluggableAuthService.PluggableAuthService import registerMultiPlugin  # noqa
+from zope.i18nmessageid import MessageFactory
+
+
+_ = MessageFactory('ftw.tokenauth')
 
 
 def initialize(context):
