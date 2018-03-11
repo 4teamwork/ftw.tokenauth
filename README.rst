@@ -237,6 +237,26 @@ Authentication attempts from an unauthorized source IP address are logged
 server side, but not indicated to the client in any particular way -
 authentication is simply not performed.
 
+Usage logs
+----------
+
+In the "Manage Service Keys" view, the last use of a key to issue access
+tokens is listed in the "Last Used" column. Clicking on this timestamp
+displays a detailed log of most recent uses of the key.
+
+By default, these logs list the uses of the key in the last 7 days (the
+usage log retention period can be configured as a property on the PAS Plugin
+via the ZMI).
+
+The log entry with the most recent use of a key is always retained, while
+the other log entries are cleaned out if they're expired (cleanup happens
+whenever a any new access token is issued).
+
+The logs don't show use of access tokens to authenticate, but instead they
+show every instance where JWT authentication grants signed with this key
+were used to obtain a new access token.
+
+
 Links
 =====
 

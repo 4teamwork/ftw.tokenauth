@@ -132,6 +132,8 @@ class TestTokenAuthPlugin(FunctionalTestCase):
 
     def test_issuing_access_token_logs_key_usage(self):
         self.request._client_addr = '10.0.0.77'
+        self.request.environ['HTTP_USER_AGENT'] = 'some-client/1.23.4'
+
         with freeze(datetime(2018, 1, 1, 15, 30)):
             access_token = create(Builder('access_token'))
 
@@ -139,7 +141,8 @@ class TestTokenAuthPlugin(FunctionalTestCase):
         usage_logs = storage.get_usage_logs(access_token['key_id'])
         self.assertEqual(
             [{'issued': datetime(2018, 1, 1, 15, 30),
-              'ip_address': '10.0.0.77'}],
+              'ip_address': '10.0.0.77',
+              'user_agent': 'some-client/1.23.4'}],
             usage_logs)
 
     def test_cleans_up_expired_tokens(self):

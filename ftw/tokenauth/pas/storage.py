@@ -130,6 +130,8 @@ class CredentialStorage(object):
 
         self._service_keys.pop(key_id)
 
+        # TODO: We may want to clean out usage logs as well
+
         # Remove any tokens tied to this key
         for token, access_token in self._access_tokens.items():
             if access_token['key_id'] == key_id:
@@ -166,13 +168,16 @@ class CredentialStorage(object):
         """
         key_id = access_token['key_id']
         if key_id not in self._usage_logs:
-            # TODO: Maybe use a BTree set here?
             self._usage_logs[key_id] = PersistentList()
 
-        ip_address = getRequest().getClientAddr()
+        request = getRequest()
+        ip_address = request.getClientAddr()
+        user_agent = request.environ.get('HTTP_USER_AGENT')
+
         log_entry = PersistentMapping({
             'issued': access_token['issued'],
-            'ip_address': ip_address})
+            'ip_address': ip_address,
+            'user_agent': user_agent})
         self._usage_logs[key_id].append(log_entry)
 
         self.rotate_usage_logs()

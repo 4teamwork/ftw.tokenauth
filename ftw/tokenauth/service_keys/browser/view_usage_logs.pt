@@ -35,12 +35,14 @@
                     <tr>
                         <th i18n:translate="">Time</th>
                         <th i18n:translate="">IP Address</th>
+                        <th i18n:translate="">User Agent</th>
                     </tr>
                 </thead>
                 <tbody tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
                     <tr tal:repeat="entry view/get_usage_logs">
                         <td tal:content="python:toLocalizedTime(entry['issued'], long_format=1)" />
                         <td tal:content="entry/ip_address" />
+                        <td tal:content="entry/user_agent" />
                     </tr>
                 </tbody>
             </table>

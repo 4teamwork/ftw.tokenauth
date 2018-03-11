@@ -21,7 +21,7 @@ tests_require = [
 setup(name='ftw.tokenauth',
       version=version,
       description="Token Authentication for Plone",
-      long_description=open("README.rst").read() + "\n" + open(
+      long_description=open("README.rst").read() + "\n\n" + open(
           os.path.join("docs", "HISTORY.txt")).read(),
 
       classifiers=[
