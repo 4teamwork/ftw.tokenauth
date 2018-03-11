@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-11 14:40+0000\n"
+"POT-Creation-Date: 2018-03-11 18:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,14 +12,15 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 
 #: ./ftw/tokenauth/service_keys/browser/base_form.py:49
-msgid "Allowed IP range specification in <strong><a href=\"https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation\">CIDR notation</a></strong>."
-msgstr "Erlaubter IP-Range in <strong><a href=\"https://de.wikipedia.org/wiki/Classless_Inter-Domain_Routing#Beispiele\">CIDR notation</a></strong>."
+msgid "Allowed IP range specification in <strong><a href=\"https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation\">CIDR notation</a></strong>. Multiple comma-separated addresses / networks may be supplied."
+msgstr "Erlaubter IP-Range in <strong><a href=\"https://de.wikipedia.org/wiki/Classless_Inter-Domain_Routing#Beispiele\">CIDR notation</a></strong>. Mehrere Adressen / Netzwerke können kommagetrennt angegeben werden."
 
 #: ./ftw/tokenauth/service_keys/browser/download_key.pt:49
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:55
 msgid "Back to [Manage Service Keys]"
 msgstr "Zurück zu [Service-Schlüssel verwalten]"
 
-#: ./ftw/tokenauth/service_keys/browser/edit.py:90
+#: ./ftw/tokenauth/service_keys/browser/edit.py:97
 #: ./ftw/tokenauth/service_keys/browser/issue.py:59
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -44,7 +45,7 @@ msgstr "Bearbeiten"
 msgid "Edit Service Key"
 msgstr "Service-Schlüssel bearbeiten"
 
-#: ./ftw/tokenauth/service_keys/browser/edit.py:92
+#: ./ftw/tokenauth/service_keys/browser/edit.py:99
 msgid "Edit cancelled"
 msgstr "Bearbeiten abgebrochen"
 
@@ -105,7 +106,7 @@ msgstr "Service-Schlüssel verwalten"
 msgid "Recent uses of this key"
 msgstr "Kürzliche Verwendungen dieses Schlüssels"
 
-#: ./ftw/tokenauth/service_keys/browser/edit.py:77
+#: ./ftw/tokenauth/service_keys/browser/edit.py:84
 msgid "Save"
 msgstr "Speichern"
 

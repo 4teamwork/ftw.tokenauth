@@ -87,7 +87,9 @@ They need to issue a service key that is then displayed **exactly once** for
 download, and store the private key in a safe location accessible to the
 client that will use it.
 
-TODO: Document IP range restrictions and key revocation.
+`IP range restrictions`_ may also be defined when issuing a key.
+
+TODO: Document Key revocation.
 
 2. Create and sign JWT authorization grant using service key
 ------------------------------------------------------------
@@ -203,6 +205,37 @@ Python Example:
 
 TODO: Document error responses for invalid tokens
 
+
+Advanced use
+============
+
+This section covers some more advanced settings and functionality of
+``ftw.tokenauth``.
+
+IP range restrictions
+---------------------
+
+When issuing a key, IP range restrictions may be defined that limit from what
+source IP address access tokens tied to this key may be used.
+
+Changes to IP range restrictions for a given key are effective immediately,
+and also affect already issued tokens tied to this key.
+
+IP ranges may be specified as a single IP address or as a network in
+`CIDR notation <https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation>`_
+using the slash-suffix.
+
+Multiple ranges may be provided in comma-separated form.
+
+Examples of valid IP range specifications:
+
+- ``192.168.1.1``
+- ``192.168.0.0/16``
+- ``192.168.1.1, 10.0.0.0/8``
+
+Authentication attempts from an unauthorized source IP address are logged
+server side, but not indicated to the client in any particular way -
+authentication is simply not performed.
 
 Links
 =====
