@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-11 10:53+0000\n"
+"POT-Creation-Date: 2018-03-11 11:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,8 +14,45 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "Preferred-Encodings: utf-8 latin1\n"
 
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:29
+msgid "Client-ID"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:53
+msgid "Edit"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:30
+msgid "IP Range"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:64
+msgid "Issue new service key"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:31
+msgid "Issued"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.py:55
+msgid "Keys revoked."
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:32
+msgid "Last Used"
+msgstr ""
+
 #: ./ftw/tokenauth/profiles/default/actions.xml
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:17
 msgid "Manage Service Keys"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:23
+msgid "Service Keys"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:28
+msgid "Title"
 msgstr ""
 
 #: ./ftw/tokenauth/configure.zcml:31
@@ -24,5 +61,10 @@ msgstr ""
 
 #: ./ftw/tokenauth/configure.zcml:23
 msgid "ftw.tokenauth default"
+msgstr ""
+
+#. Default: "Revoke selected keys"
+#: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:70
+msgid "label_revoke_selected_keys"
 msgstr ""
 
