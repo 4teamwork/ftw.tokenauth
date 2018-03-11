@@ -23,11 +23,18 @@ class EditKeyForm(BaseForm):
     def updateWidgets(self, *args, **kwargs):
         super(EditKeyForm, self).updateWidgets(*args, **kwargs)
 
-        # Hack to retain widget values on validation error
-        if 'form.buttons.save' not in self.request:
-            # Prefill form
-            key = self.get_key()
-            for widget in self.widgets.values():
+        saving = 'form.buttons.save' in self.request
+
+        # Prefill form widgets with persisted values from DB
+        key = self.get_key()
+        for widget in self.widgets.values():
+            # Always prefill readonly widgets.
+            #
+            # Prefill other widgets only upon initial rendering of the form,
+            # not when trying to save - this is so we don't override
+            # actual user provided inputs with persisted values from the
+            # DB when rendering the form in the case of validation errors.
+            if widget.field.readonly or not saving:
                 name = widget.field.getName()
                 value = key[name]
                 converter = IDataConverter(widget)
