@@ -371,6 +371,7 @@ class TestUsageLogsView(FunctionalTestCase):
         # Create a service key and issue two access tokens with it
         service_key = create(Builder('service_key'))
         self.request._client_addr = '10.0.0.77'
+        self.request.environ['HTTP_USER_AGENT'] = 'some-client/1.23.4'
 
         with freeze(datetime(2018, 1, 1, 15, 30)):
             create(Builder('access_token')
@@ -394,7 +395,11 @@ class TestUsageLogsView(FunctionalTestCase):
 
         logs_table = browser.css('#table-usage-logs').first
         self.assertEqual(
-            [{'IP Address': '10.0.0.77', 'Time': 'Jan 01, 2018 03:30 PM'},
-             {'IP Address': '10.0.0.77', 'Time': 'Jan 05, 2018 12:45 PM'}],
+            [{'IP Address': '10.0.0.77',
+              'Time': 'Jan 05, 2018 12:45 PM',
+              'User Agent': 'some-client/1.23.4'},
+             {'IP Address': '10.0.0.77',
+              'Time': 'Jan 01, 2018 03:30 PM',
+              'User Agent': 'some-client/1.23.4'}],
             logs_table.dicts()
         )

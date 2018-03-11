@@ -154,13 +154,16 @@ class TestStorage(FunctionalTestCase):
         service_key = create(Builder('service_key'))
 
         self.request._client_addr = '192.168.1.1'
+        self.request.environ['HTTP_USER_AGENT'] = 'python-requests/2.18.4'
+
         with freeze(datetime(2018, 1, 1, 15, 30)):
             create(Builder('access_token').from_key(service_key))
 
         self.assertEqual(
             {service_key['key_id']: [
                 {'issued': datetime(2018, 1, 1, 15, 30),
-                 'ip_address': '192.168.1.1'}]},
+                 'ip_address': '192.168.1.1',
+                 'user_agent': 'python-requests/2.18.4'}]},
             dict(storage._usage_logs))
 
     def test_get_usage_logs(self):
@@ -168,6 +171,8 @@ class TestStorage(FunctionalTestCase):
         service_key = create(Builder('service_key'))
 
         self.request._client_addr = '192.168.1.1'
+        self.request.environ['HTTP_USER_AGENT'] = 'python-requests/2.18.4'
+
         with freeze(datetime(2018, 1, 10, 15, 30)) as clock:
             create(Builder('access_token').from_key(service_key))
             clock.backward(hours=1)
@@ -177,9 +182,11 @@ class TestStorage(FunctionalTestCase):
         self.assertEqual(
             [
                 {'issued': datetime(2018, 1, 10, 14, 30),
-                 'ip_address': '192.168.1.1'},
+                 'ip_address': '192.168.1.1',
+                 'user_agent': 'python-requests/2.18.4'},
                 {'issued': datetime(2018, 1, 10, 15, 30),
-                 'ip_address': '192.168.1.1'},
+                 'ip_address': '192.168.1.1',
+                 'user_agent': 'python-requests/2.18.4'},
             ],
             storage.get_usage_logs(service_key['key_id']))
 
@@ -195,7 +202,6 @@ class TestStorage(FunctionalTestCase):
         storage = CredentialStorage(self.plugin)
         service_key = create(Builder('service_key'))
 
-        self.request._client_addr = '192.168.1.1'
         with freeze(datetime(2018, 1, 10, 15, 30)):
             create(Builder('access_token').from_key(service_key))
 
@@ -218,9 +224,11 @@ class TestStorage(FunctionalTestCase):
         self.assertEqual(
             {service_key['key_id']: [
                 {'issued': datetime(2018, 1, 20, 15, 30),
-                 'ip_address': ''},
+                 'ip_address': '',
+                 'user_agent': None},
                 {'issued': datetime(2018, 1, 20, 17, 30),
-                 'ip_address': ''},
+                 'ip_address': '',
+                 'user_agent': None},
             ]},
             dict(storage._usage_logs))
 
@@ -239,7 +247,8 @@ class TestStorage(FunctionalTestCase):
         self.assertEqual(
             {service_key['key_id']: [
                 {'issued': datetime(2018, 1, 10, 15, 30),
-                 'ip_address': ''},
+                 'ip_address': '',
+                 'user_agent': None},
             ]},
             dict(storage._usage_logs))
 
@@ -258,5 +267,6 @@ class TestStorage(FunctionalTestCase):
 
         self.assertIn(
             {'issued': datetime(2018, 1, 10, 15, 30),
-             'ip_address': ''},
+             'ip_address': '',
+             'user_agent': None},
             dict(storage._usage_logs)[service_key['key_id']])
