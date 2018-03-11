@@ -49,7 +49,8 @@ class IKeyMetadataSchema(model.Schema):
         description=_(
             u'Allowed IP range specification in '
             u'<strong><a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation">'  # noqa
-            u'CIDR notation</a></strong>.'),
+            u'CIDR notation</a></strong>. '
+            u'Multiple comma-separated addresses / networks may be supplied.'),
     )
 
 
