@@ -24,5 +24,18 @@ class ViewUsageLogs(BrowserView):
         return service_key['title']
 
     def get_usage_logs(self):
-        entries = self.storage.get_usage_logs(self.key_id)
+        """Return usage logs in reverse order (most recent first).
+
+        This is a much more natural order for display (most recent at the top),
+        but it means we're sorting twice.
+
+        That should be a negligible penalty though, and we'd much rather incur
+        a performance hit when displaying usage logs than when writing them.
+
+        (Standard lists are optimized for appending to the end - inserts at
+        the beginning don't perform well. There's deques for that, but the
+        persistent implementation in `persistent.ring._DequeRing` isn't
+        considered public).
+        """
+        entries = reversed(self.storage.get_usage_logs(self.key_id))
         return entries
