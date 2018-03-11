@@ -13,7 +13,11 @@ class ViewUsageLogs(BrowserView):
         self.request.set('disable_border', True)
         self.key_id = self.request.form['key_id']
         key_title = self.get_key_title()
-        return self.index(key_title=key_title)
+        options = {
+            'key_title': key_title,
+            'usage_log_retention_days': plugin.usage_log_retention_days,
+        }
+        return self.index(**options)
 
     def get_key_title(self):
         service_key = self.storage.get_service_key(self.key_id)

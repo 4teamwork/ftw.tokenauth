@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-11 13:37+0000\n"
+"POT-Creation-Date: 2018-03-11 14:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,6 +49,10 @@ msgstr ""
 
 #: ./ftw/tokenauth/service_keys/browser/edit.py:92
 msgid "Edit cancelled"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:37
+msgid "IP Address"
 msgstr ""
 
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:30
@@ -100,6 +104,10 @@ msgstr ""
 msgid "Manage Service Keys"
 msgstr ""
 
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:22
+msgid "Recent uses of this key"
+msgstr ""
+
 #: ./ftw/tokenauth/service_keys/browser/edit.py:77
 msgid "Save"
 msgstr ""
@@ -108,8 +116,24 @@ msgstr ""
 msgid "Service Keys"
 msgstr ""
 
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:28
+msgid "The <strong>most recent</strong> use of a key is always displayed (whether or not it falls into that time window)."
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:36
+msgid "Time"
+msgstr ""
+
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:28
 msgid "Title"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:17
+msgid "Usage logs for key \"${key_title}\""
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:26
+msgid "Uses of this key to issue access tokens in the <strong>last ${retention_days} days</strong>."
 msgstr ""
 
 #: ./ftw/tokenauth/configure.zcml:31

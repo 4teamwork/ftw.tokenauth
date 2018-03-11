@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-11 13:37+0000\n"
+"POT-Creation-Date: 2018-03-11 14:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,6 +47,10 @@ msgstr "Service-Schlüssel bearbeiten"
 #: ./ftw/tokenauth/service_keys/browser/edit.py:92
 msgid "Edit cancelled"
 msgstr "Bearbeiten abgebrochen"
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:37
+msgid "IP Address"
+msgstr "IP-Adresse"
 
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:30
 msgid "IP Range"
@@ -97,6 +101,10 @@ msgstr "Zuletzt verwendet"
 msgid "Manage Service Keys"
 msgstr "Service-Schlüssel verwalten"
 
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:22
+msgid "Recent uses of this key"
+msgstr "Kürzliche Verwendungen dieses Schlüssels"
+
 #: ./ftw/tokenauth/service_keys/browser/edit.py:77
 msgid "Save"
 msgstr "Speichern"
@@ -105,9 +113,25 @@ msgstr "Speichern"
 msgid "Service Keys"
 msgstr "Service-Schlüssel"
 
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:28
+msgid "The <strong>most recent</strong> use of a key is always displayed (whether or not it falls into that time window)."
+msgstr "Die <strong>letzte</strong> Verwendung eines Schlüssels wird immer angezeigt (unabhängig davon, ob sie in diesem Zeitfenster stattfand oder nicht)"
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:36
+msgid "Time"
+msgstr "Zeitpunkt"
+
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:28
 msgid "Title"
 msgstr "Titel"
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:17
+msgid "Usage logs for key \"${key_title}\""
+msgstr "Logs zur Nutzung des Schlüssels \"${key_title}\""
+
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:26
+msgid "Uses of this key to issue access tokens in the <strong>last ${retention_days} days</strong>."
+msgstr "Verwendungen dieses Schlüssels um Access Tokens auszustellen in den <strong>letzten ${retention_days} Tagen</strong>."
 
 #: ./ftw/tokenauth/configure.zcml:31
 msgid "ftw.tokenauth : uninstall"
