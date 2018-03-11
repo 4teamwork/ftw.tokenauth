@@ -150,7 +150,7 @@ class TestManageServiceKeysView(FunctionalTestCase):
         self.assertEqual(['There were some errors.'], error_messages())
 
         self.assertEqual(
-            {'IP Range':
+            {'IP Range Allowed IP range specification in CIDR notation.':
                 ['Invalid IP range: 192.168.5.5/16 has host bits set']},
             erroneous_fields(browser.forms['form']))
 
@@ -266,7 +266,7 @@ class TestEditServiceKeysView(FunctionalTestCase):
         self.assertEqual(['There were some errors.'], error_messages())
 
         self.assertEqual(
-            {'IP Range':
+            {'IP Range Allowed IP range specification in CIDR notation.':
                 ['Invalid IP range: 10.0.5.5/24 has host bits set'],
              'Title':
                 ['Required input is missing.']},
@@ -300,7 +300,7 @@ class TestEditServiceKeysView(FunctionalTestCase):
         self.assertEqual(['There were some errors.'], error_messages())
 
         self.assertEqual(
-            {'IP Range':
+            {'IP Range Allowed IP range specification in CIDR notation.':
                 ['Invalid IP range: 10.0.5.5/24 has host bits set'],
              'Title':
                 ['Required input is missing.']},

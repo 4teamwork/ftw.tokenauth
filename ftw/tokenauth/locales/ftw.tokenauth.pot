@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-11 11:25+0000\n"
+"POT-Creation-Date: 2018-03-11 12:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,6 +13,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 "Preferred-Encodings: utf-8 latin1\n"
+
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:49
+msgid "Allowed IP range specification in <strong><a href=\"https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation\">CIDR notation</a></strong>."
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/issue.py:59
+msgid "Cancel"
+msgstr ""
 
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:29
 msgid "Client-ID"
@@ -26,12 +34,36 @@ msgstr ""
 msgid "IP Range"
 msgstr ""
 
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:17
+msgid "Invalid IP range: ${ip_range_error}"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/issue.py:31
+msgid "Issue Service Key"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/issue.py:32
+msgid "Issue a key to be used for authentication by a service application"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/issue.py:39
+msgid "Issue key"
+msgstr ""
+
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:64
 msgid "Issue new service key"
 msgstr ""
 
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:31
 msgid "Issued"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/issue.py:55
+msgid "Key created: ${key_id}"
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/issue.py:62
+msgid "Key creation cancelled."
 msgstr ""
 
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.py:55
@@ -63,8 +95,33 @@ msgstr ""
 msgid "ftw.tokenauth default"
 msgstr ""
 
+#. Default: "IP Range"
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:46
+msgid "label_ip_range"
+msgstr ""
+
+#. Default: "Issued"
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:41
+msgid "label_issued"
+msgstr ""
+
+#. Default: "Key ID"
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:31
+msgid "label_key_id"
+msgstr ""
+
 #. Default: "Revoke selected keys"
 #: ./ftw/tokenauth/service_keys/browser/manage_service_keys.pt:70
 msgid "label_revoke_selected_keys"
+msgstr ""
+
+#. Default: "Title"
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:27
+msgid "label_title"
+msgstr ""
+
+#. Default: "User ID"
+#: ./ftw/tokenauth/service_keys/browser/base_form.py:36
+msgid "label_user_id"
 msgstr ""
 
