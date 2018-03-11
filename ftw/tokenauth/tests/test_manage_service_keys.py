@@ -283,9 +283,10 @@ class TestEditServiceKeysView(FunctionalTestCase):
 
     @browsing
     def test_edit_key_form_retains_widget_values_on_error(self, browser):
-        create(Builder('service_key')
-               .having(title='Some key',
-                       ip_range='192.168.0.0/16'))
+        with freeze(datetime(2018, 1, 7, 15, 30)):
+            service_key = create(Builder('service_key')
+                                 .having(title='Some key',
+                                         ip_range='192.168.0.0/16'))
         transaction.commit()
 
         browser.login().open(view='@@manage-service-keys')
@@ -313,6 +314,12 @@ class TestEditServiceKeysView(FunctionalTestCase):
              ('form.buttons.cancel', 'Cancel'),
              ('form.buttons.save', 'Save')],
             form.values.items())
+
+        # Assert that readonly widget values are retained as well
+        widget_values = form.css('div.field').text
+        self.assertIn('User ID %s' % TEST_USER_ID, widget_values)
+        self.assertIn('Key ID %s' % service_key['key_id'], widget_values)
+        self.assertIn('Issued 1/7/18 3:30 PM', widget_values)
 
     @browsing
     def test_edit_key_form_handles_no_changes_being_made(self, browser):
