@@ -10,6 +10,8 @@
 
   <include file="permissions.zcml" />
 
+  <i18n:registerTranslations directory="locales" />
+
   <include package=".service_keys" />
   <include package=".oauth2" />
 
