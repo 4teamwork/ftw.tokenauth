@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-12 01:23+0000\n"
+"POT-Creation-Date: 2018-03-12 01:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: ./ftw/tokenauth/service_keys/browser/download_key.pt:64
 #: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:57
-msgid "Back to [Manage Service Keys]"
+msgid "Back"
 msgstr ""
 
 #: ./ftw/tokenauth/service_keys/browser/edit.py:97

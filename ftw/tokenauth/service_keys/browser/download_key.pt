@@ -61,7 +61,7 @@
 
   <br />
   <a class="button" tal:attributes="href string:${context/absolute_url}/@@manage-service-keys">
-      &lt; <span i18n:translate="">Back to [Manage Service Keys]</span>
+      &lt; <span i18n:translate="">Back</span>
   </a>
 
   </metal:content>
