@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-11 18:13+0000\n"
+"POT-Creation-Date: 2018-03-12 01:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 msgid "Allowed IP range specification in <strong><a href=\"https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation\">CIDR notation</a></strong>. Multiple comma-separated addresses / networks may be supplied."
 msgstr "Erlaubter IP-Range in <strong><a href=\"https://de.wikipedia.org/wiki/Classless_Inter-Domain_Routing#Beispiele\">CIDR notation</a></strong>. Mehrere Adressen / Netzwerke können kommagetrennt angegeben werden."
 
-#: ./ftw/tokenauth/service_keys/browser/download_key.pt:49
-#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:55
+#: ./ftw/tokenauth/service_keys/browser/download_key.pt:64
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:57
 msgid "Back to [Manage Service Keys]"
 msgstr "Zurück zu [Service-Schlüssel verwalten]"
 
@@ -118,6 +118,10 @@ msgstr "Service-Schlüssel"
 msgid "The <strong>most recent</strong> use of a key is always displayed (whether or not it falls into that time window)."
 msgstr "Die <strong>letzte</strong> Verwendung eines Schlüssels wird immer angezeigt (unabhängig davon, ob sie in diesem Zeitfenster stattfand oder nicht)"
 
+#: ./ftw/tokenauth/service_keys/browser/download_key.pt:44
+msgid "This is the <strong>only time</strong> your private key will be displayed - it will not be stored on the server, and can't be recovered should you fail to save it."
+msgstr "Dies ist das <strong>einzige Mal</strong> wo Ihr privater Schlüssel angezeigt wird - er wird nicht auf dem Server gespeichert, und kann nicht wiederhergestellt werden."
+
 #: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:36
 msgid "Time"
 msgstr "Zeitpunkt"
@@ -130,9 +134,17 @@ msgstr "Titel"
 msgid "Usage logs for key \"${key_title}\""
 msgstr "Logs zur Nutzung des Schlüssels \"${key_title}\""
 
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:38
+msgid "User Agent"
+msgstr "User Agent"
+
 #: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:26
 msgid "Uses of this key to issue access tokens in the <strong>last ${retention_days} days</strong>."
 msgstr "Verwendungen dieses Schlüssels um Access Tokens auszustellen in den <strong>letzten ${retention_days} Tagen</strong>."
+
+#: ./ftw/tokenauth/service_keys/browser/download_key.pt:49
+msgid "You should copy &amp; paste this key into a <tt>.json</tt> file, and store this file in a location accessible <strong>only to your service application</strong>. This key grants anyone in possession of it full access to this account. You should therefore make sure to protect it with the least file system permissions possible."
+msgstr "Speichern Sie diesen Schlüssel mittels Copy &amp; Paste in eine <tt>.json</tt> Datei, und sichern Sie diese Datei an einem Ort wo <strong>nur Ihre Service-Applikation</strong> Zugriff hat. Diese Schlüssel ermöglicht jedem, der im Besitz davon ist, vollständigen Zugriff auf diesen Account. Sie sollten ihn daher sorgfältig aufbewahren, und mit den minimal möglichen Berechtigungen auf dem Dateisystem versehen."
 
 #: ./ftw/tokenauth/configure.zcml:31
 msgid "ftw.tokenauth : uninstall"
