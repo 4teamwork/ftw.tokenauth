@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-11 18:13+0000\n"
+"POT-Creation-Date: 2018-03-12 01:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,9 +18,9 @@ msgstr ""
 msgid "Allowed IP range specification in <strong><a href=\"https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation\">CIDR notation</a></strong>. Multiple comma-separated addresses / networks may be supplied."
 msgstr ""
 
-#: ./ftw/tokenauth/service_keys/browser/download_key.pt:49
-#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:55
-msgid "Back to [Manage Service Keys]"
+#: ./ftw/tokenauth/service_keys/browser/download_key.pt:64
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:57
+msgid "Back"
 msgstr ""
 
 #: ./ftw/tokenauth/service_keys/browser/edit.py:97
@@ -121,6 +121,10 @@ msgstr ""
 msgid "The <strong>most recent</strong> use of a key is always displayed (whether or not it falls into that time window)."
 msgstr ""
 
+#: ./ftw/tokenauth/service_keys/browser/download_key.pt:44
+msgid "This is the <strong>only time</strong> your private key will be displayed - it will not be stored on the server, and can't be recovered should you fail to save it."
+msgstr ""
+
 #: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:36
 msgid "Time"
 msgstr ""
@@ -133,8 +137,16 @@ msgstr ""
 msgid "Usage logs for key \"${key_title}\""
 msgstr ""
 
+#: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:38
+msgid "User Agent"
+msgstr ""
+
 #: ./ftw/tokenauth/service_keys/browser/view_usage_logs.pt:26
 msgid "Uses of this key to issue access tokens in the <strong>last ${retention_days} days</strong>."
+msgstr ""
+
+#: ./ftw/tokenauth/service_keys/browser/download_key.pt:49
+msgid "You should copy &amp; paste this key into a <tt>.json</tt> file, and store this file in a location accessible <strong>only to your service application</strong>. This key grants anyone in possession of it full access to this account. You should therefore make sure to protect it with the least file system permissions possible."
 msgstr ""
 
 #: ./ftw/tokenauth/configure.zcml:31

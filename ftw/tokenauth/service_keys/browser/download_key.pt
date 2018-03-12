@@ -38,7 +38,22 @@
   </metal:title>
 
   <metal:content fill-slot="content-core">
-    <p i18n:translate="">Download your service key.</p>
+    <p i18n:translate="">
+        Download your service key.
+    </p>
+    <p i18n:translate="">
+        This is the <strong>only time</strong> your private key will be displayed - it will not
+        be stored on the server, and can't be recovered should you fail to save it.
+    </p>
+
+    <p i18n:translate="">
+        You should copy &amp; paste this key into a <tt>.json</tt> file, and
+        store this file in a location accessible <strong>only to your service application</strong>.
+
+        This key grants anyone in possession of it full access to this account.
+        You should therefore make sure to protect it with the least file system
+        permissions possible.
+    </p>
 
     <h2 tal:content="options/title">Key Title</h2>
 
@@ -46,7 +61,7 @@
 
   <br />
   <a class="button" tal:attributes="href string:${context/absolute_url}/@@manage-service-keys">
-      &lt; <span i18n:translate="">Back to [Manage Service Keys]</span>
+      &lt; <span i18n:translate="">Back</span>
   </a>
 
   </metal:content>

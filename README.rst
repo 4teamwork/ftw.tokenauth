@@ -11,11 +11,11 @@ Installation
 - Add ``ftw.tokenauth`` to your buildout configuration or as a dependency
   of your policy package:
 
-  .. code:: ini
-  
-      [instance]
-      eggs +=
-          ftw.tokenauth
+.. code:: ini
+
+    [instance]
+    eggs +=
+        ftw.tokenauth
 
 - Install the generic setup profile of ``ftw.tokenauth``.
 
@@ -49,28 +49,15 @@ The authentication flow involves four steps:
 
 Assuming the client is in possession of a service key, the flow looks like this:
 
-  .. code::
+.. image:: https://github.com/4teamwork/ftw.tokenauth/raw/master/docs/authentication-flow.png
 
-    +--------+                                     +---------------+
-    |        |-- Create and sign JWT               |               |
-    |        |                                     |               |
-    |        |                                     |               |
-    |        |                                     |               |
-    |        |-- Use JWT to request token -------->|               |
-    |        |                                     |               |
-    |        |                                     |               |
-    | Client |                                     |     Plone     |
-    |        |<----------------- Token response ---|               |
-    |        |                                     |               |
-    |        |                                     |               |
-    |        |                                     |               |
-    |        |-- Use token to authenticate ------->|               |
-    |        |                                     |               |
-    |        |                                     |               |
-    +--------+                                     +---------------+
+..
+   Image Source: https://drive.google.com/open?id=1F8C4QB57ALF705vx9xkTDIX8AqMCJ30v
 
-Usage
-=====
+
+
+Basic Usage
+===========
 
 In order to set up machine-to-machine authentication for a client, the
 following steps need to be performed:
@@ -83,9 +70,13 @@ the ``ftw.tokenauth: Manage own Service Keys`` permission, can issue service
 keys for their account via the ``@@manage-service-keys`` view
 (``Manage Service Keys`` action in personal tools menu).
 
+.. image:: https://github.com/4teamwork/ftw.tokenauth/raw/master/docs/manage-service-keys.png
+
 They need to issue a service key that is then displayed **exactly once** for
 download, and store the private key in a safe location accessible to the
 client that will use it.
+
+.. image:: https://github.com/4teamwork/ftw.tokenauth/raw/master/docs/issue-service-key.png
 
 `IP range restrictions`_ may also be defined when issuing a key.
 
@@ -118,7 +109,7 @@ signature algorithm is ``RS256``.
 
 Python Example:
 
-  .. code:: python
+.. code:: python
 
     import json
     import jwt
@@ -161,18 +152,20 @@ assertion   The JWT authorization grant
 The token endpoint will then respond with a token response containing the
 access token:
 
-  .. code:: python
+.. code:: json
 
-    {"access_token": <token>,
-     "expires_in": 3600,
-     "token_type": "Bearer"}
+    {
+      "access_token": "<token>",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+    }
 
 The response will be of ``Content-Type: application/json`` and contain a JSON
 encoded body.
 
 Python Example:
 
-  .. code:: python
+.. code:: python
 
     import requests
 
@@ -181,6 +174,7 @@ Python Example:
     payload = {'grant_type': GRANT_TYPE, 'assertion': grant}
     response = requests.post(service_key['token_uri'], data=payload)
     token = response.json()['access_token']
+
 
 TODO: Document error responses for token requests
 
@@ -196,14 +190,57 @@ and request a new access token.
 
 Python Example:
 
-  .. code:: python
+.. code:: python
 
     with requests.Session() as session:
         session.headers.update({'Authorization': 'Bearer %s' % token})
         response = session.get('http://localhost:8080/Plone/')
         # ...
 
-TODO: Document error responses for invalid tokens
+If the token used by the client is expired, the server will respond with an
+error response:
+
+.. code:: json
+
+    {
+      "error": "invalid_token",
+      "error_description": "Access token expired"
+    }
+
+The client should then sign another JWT authentication grant, request a new
+token, and re-dispatch the failed request with the original parameters, and
+the new token.
+
+
+Recommended Client Implementation
+=================================
+
+The recommended logic to implement on a client to repeatedly authenticate and
+obtain new access tokens looks something like this:
+
+.. image:: https://github.com/4teamwork/ftw.tokenauth/raw/master/docs/client-flow.png
+
+..
+   Image Source: https://drive.google.com/open?id=1wVua7R5VQUxJKGL8dq1kGV4AjLgjGSXZ
+
+
+The client should, instead of trying to predict access token expiration, just
+anticipate the case that authentication using an existing token will fail
+(because the token expired), and then perform the necessary steps to obtain
+a new token.
+
+To accomplish this, it is recommended to delegate all the requests a client
+application wants to make to a class that expects an ``Access token expired``
+response as described above, and obtains a new token if necessary. The failed
+request that lead to the error response then needs to be re-dispatched with
+its original parameters, but then new token in the ``Authorization`` header.
+
+Care needs to be taken to **not** include an expired token (or any
+``Authorization`` header for that matter) with the requests to the token
+endpoint when obtaining a new token.
+
+An example implementation in Python can be found in
+`docs/client-example.py <https://github.com/4teamwork/ftw.tokenauth/blob/master/docs/client-example.py>`_.
 
 
 Advanced use
