@@ -2,6 +2,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="ftw.tokenauth">
@@ -9,6 +10,7 @@
   <five:registerPackage package="." initialize=".initialize" />
 
   <include file="permissions.zcml" />
+  <include file="lawgiver.zcml" zcml:condition="installed ftw.lawgiver" />
 
   <i18n:registerTranslations directory="locales" />
 
