@@ -11,12 +11,12 @@ class TestIPRangeParsing(unittest.TestCase):
 
     def test_single_ipv4_address_is_parsed(self):
         self.assertEqual(
-            [ip_network('192.168.0.1')],
+            [ip_network(u'192.168.0.1')],
             parse_ip_range('192.168.0.1'))
 
     def test_single_ipv4_cidr_network_is_parsed(self):
         self.assertEqual(
-            [ip_network('192.168.0.0/16')],
+            [ip_network(u'192.168.0.0/16')],
             parse_ip_range('192.168.0.0/16'))
 
         self.assertTrue(valid_ip_range('192.168.0.0/16'))
@@ -27,17 +27,17 @@ class TestIPRangeParsing(unittest.TestCase):
 
     def test_multiple_ipv4_addresses_are_parsed(self):
         self.assertEqual(
-            [ip_network('10.0.0.1'), ip_network('192.168.0.1')],
+            [ip_network(u'10.0.0.1'), ip_network(u'192.168.0.1')],
             parse_ip_range('10.0.0.1,192.168.0.1'))
 
     def test_mix_of_single_adress_and_networks_is_parsed(self):
         self.assertEqual(
-            [ip_network('10.1.1.5'), ip_network('192.168.0.0/16')],
+            [ip_network(u'10.1.1.5'), ip_network(u'192.168.0.0/16')],
             parse_ip_range('10.1.1.5,192.168.0.0/16'))
 
     def test_white_space_is_stripped(self):
         self.assertEqual(
-            [ip_network('10.0.0.1'), ip_network('192.168.0.1')],
+            [ip_network(u'10.0.0.1'), ip_network(u'192.168.0.1')],
             parse_ip_range('10.0.0.1  ,  192.168.0.1'))
 
 
