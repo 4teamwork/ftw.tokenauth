@@ -146,6 +146,7 @@ class CredentialStorage(object):
         token = access_token['token']
         self._access_tokens[token] = PersistentMapping({
             'key_id': access_token['key_id'],
+            'user_id': access_token['user_id'],
             'issued': access_token['issued'],
             'expires_in': access_token['expires_in'],
         })

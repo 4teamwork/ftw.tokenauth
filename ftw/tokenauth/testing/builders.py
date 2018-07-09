@@ -215,7 +215,8 @@ class AccessTokenBuilder(object):
 
     def create(self, **kwargs):
         service_key = self.get_or_create_key()
-        access_token = self.plugin.issue_access_token(service_key['key_id'])
+        access_token = self.plugin.issue_access_token(
+            service_key['key_id'], service_key['user_id'])
 
         if self.issued_at:
             # Set issue date of token in storage
