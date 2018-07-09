@@ -112,6 +112,10 @@ class JWTGrantBuilder(object):
         self.keypair = keypair
         return self
 
+    def for_subject(self, subject):
+        self.arguments['sub'] = subject
+        return self
+
     def create(self, **kwargs):
         if not self.keypair:
             raise Exception(

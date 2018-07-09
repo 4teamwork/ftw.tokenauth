@@ -3,6 +3,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.tokenauth.oauth2.browser.oauth2_token import JWT_BEARER_GRANT_TYPE
 from ftw.tokenauth.tests import FunctionalTestCase
+from plone import api
+from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import TEST_USER_ID
 import jwt
 import transaction
@@ -180,3 +182,72 @@ class TestOAuth2TokenEndpoint(FunctionalTestCase):
 
         browser.open(view='@@oauth2-token', method='POST', data=data)
         self.assertDictContainsSubset({'expires_in': 7200}, browser.json)
+
+    @browsing
+    def test_issues_impersonated_access_token(self, browser):
+        self.portal.manage_permission(
+            'ftw.tokenauth: Impersonate user', ['Member'], acquire=False)
+        api.user.create(email='jane@plone.org', username='jane')
+        assertion = create(Builder('jwt_grant').from_keypair(
+            self.keypair).for_subject('jane'))
+        transaction.commit()
+
+        data = {'grant_type': JWT_BEARER_GRANT_TYPE,
+                'assertion': assertion}
+
+        browser.open(view='@@oauth2-token', method='POST', data=data)
+
+        self.assertEqual(
+            ['access_token', 'token_type', 'expires_in'],
+            browser.json.keys())
+        self.assertDictContainsSubset(
+            {'token_type': 'Bearer',
+             'expires_in': 3600},
+            browser.json)
+
+        # Make sure the token we got is valid and can be used to authenticate
+        token = browser.json['access_token']
+        creds = {'access_token': token, 'extractor': 'token_auth'}
+        self.assertEqual(
+            ('jane', 'jane'),
+            self.plugin.authenticateCredentials(creds))
+
+    @browsing
+    def test_rejects_impersonated_access_token_without_permission_(
+            self, browser):
+        api.user.create(email='jane@plone.org', username='jane')
+        assertion = create(Builder('jwt_grant').from_keypair(
+            self.keypair).for_subject('jane'))
+        transaction.commit()
+
+        data = {'grant_type': JWT_BEARER_GRANT_TYPE,
+                'assertion': assertion}
+
+        with browser.expect_http_error(code=400):
+            browser.open(view='@@oauth2-token', method='POST', data=data)
+
+        self.assertEqual(
+            {'error': 'invalid_grant',
+             'error_description':
+                "JWT subject doesn't match user_id of service key."},
+            browser.json)
+
+    @browsing
+    def test_rejects_impersonated_access_token_without_service_user_(
+            self, browser):
+        keypair = self.plugin.issue_keypair(SITE_OWNER_NAME, 'A Service Key')
+        assertion = create(Builder('jwt_grant').from_keypair(
+            keypair).for_subject('jane'))
+        transaction.commit()
+
+        data = {'grant_type': JWT_BEARER_GRANT_TYPE,
+                'assertion': assertion}
+
+        with browser.expect_http_error(code=400):
+            browser.open(view='@@oauth2-token', method='POST', data=data)
+
+        self.assertEqual(
+            {'error': 'invalid_grant',
+             'error_description':
+                "Service key user not found."},
+            browser.json)
