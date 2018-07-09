@@ -162,6 +162,7 @@ class TestStorage(FunctionalTestCase):
         self.assertEqual(
             {service_key['key_id']: [
                 {'issued': datetime(2018, 1, 1, 15, 30),
+                 'user_id': 'test_user_1_',
                  'ip_address': '192.168.1.1',
                  'user_agent': 'python-requests/2.18.4'}]},
             dict(storage._usage_logs))
@@ -182,9 +183,11 @@ class TestStorage(FunctionalTestCase):
         self.assertEqual(
             [
                 {'issued': datetime(2018, 1, 10, 14, 30),
+                 'user_id': 'test_user_1_',
                  'ip_address': '192.168.1.1',
                  'user_agent': 'python-requests/2.18.4'},
                 {'issued': datetime(2018, 1, 10, 15, 30),
+                 'user_id': 'test_user_1_',
                  'ip_address': '192.168.1.1',
                  'user_agent': 'python-requests/2.18.4'},
             ],
@@ -224,9 +227,11 @@ class TestStorage(FunctionalTestCase):
         self.assertEqual(
             {service_key['key_id']: [
                 {'issued': datetime(2018, 1, 20, 15, 30),
+                 'user_id': 'test_user_1_',
                  'ip_address': '',
                  'user_agent': None},
                 {'issued': datetime(2018, 1, 20, 17, 30),
+                 'user_id': 'test_user_1_',
                  'ip_address': '',
                  'user_agent': None},
             ]},
@@ -247,6 +252,7 @@ class TestStorage(FunctionalTestCase):
         self.assertEqual(
             {service_key['key_id']: [
                 {'issued': datetime(2018, 1, 10, 15, 30),
+                 'user_id': 'test_user_1_',
                  'ip_address': '',
                  'user_agent': None},
             ]},
@@ -267,6 +273,7 @@ class TestStorage(FunctionalTestCase):
 
         self.assertIn(
             {'issued': datetime(2018, 1, 10, 15, 30),
+             'user_id': 'test_user_1_',
              'ip_address': '',
              'user_agent': None},
             dict(storage._usage_logs)[service_key['key_id']])

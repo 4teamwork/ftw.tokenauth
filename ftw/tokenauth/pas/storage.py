@@ -176,6 +176,7 @@ class CredentialStorage(object):
 
         log_entry = PersistentMapping({
             'issued': access_token['issued'],
+            'user_id': access_token['user_id'],
             'ip_address': ip_address,
             'user_agent': user_agent})
         self._usage_logs[key_id].append(log_entry)
