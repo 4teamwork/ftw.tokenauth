@@ -8,7 +8,6 @@ from ftw.tokenauth.oauth2.exceptions import MissingExpClaim
 from ftw.tokenauth.oauth2.exceptions import MissingIatClaim
 from ftw.tokenauth.oauth2.exceptions import NBFClaimNotSupported
 from ftw.tokenauth.oauth2.exceptions import ScopesNotSupported
-from ftw.tokenauth.oauth2.exceptions import SubjectMismatch
 import jwt
 
 
@@ -34,10 +33,6 @@ class JWTBearerGrantProcessor(object):
         if verified_claimset['iss'] != service_key['client_id']:
             raise IssuerMismatch(
                 "JWT issuer doesn't match client_id of service key")
-
-        if verified_claimset['sub'] != service_key['user_id']:
-            raise SubjectMismatch(
-                "JWT subject doesn't match user_id of service key")
 
         exp = verified_claimset.get('exp')
         if not exp:
@@ -76,4 +71,4 @@ class JWTBearerGrantProcessor(object):
         if 'scope' in verified_claimset:
             raise ScopesNotSupported("Scopes are not supported yet")
 
-        return True
+        return verified_claimset

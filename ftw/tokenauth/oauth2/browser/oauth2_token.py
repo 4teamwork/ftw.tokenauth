@@ -1,8 +1,13 @@
+from AccessControl.SecurityManagement import getSecurityManager
+from AccessControl.SecurityManagement import newSecurityManager
+from AccessControl.SecurityManagement import setSecurityManager
 from ftw.tokenauth.oauth2.exceptions import VerificationError
 from ftw.tokenauth.oauth2.jwt_grants import JWTBearerGrantProcessor
 from ftw.tokenauth.pas.storage import CredentialStorage
+from ftw.tokenauth.permissions import ImpersonateUser
 from jwt.exceptions import InvalidTokenError
 from plone import api
+from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 import json
 import jwt
@@ -171,7 +176,9 @@ class OAuth2TokenEndpoint(BrowserView):
             service_key = self.get_potential_service_key(assertion)
 
             # Validate actual JWT assertion and signature using processor
-            self.validate_jwt_grant(assertion, service_key)
+            claimset = self.validate_jwt_grant(assertion, service_key)
+
+            user_id = self.verified_subject(claimset, service_key)
 
         except ErrorResponse as exc:
             return self.send_error_response(exc)
@@ -246,11 +253,39 @@ class OAuth2TokenEndpoint(BrowserView):
         # https://tools.ietf.org/html/rfc7523#section-3
         processor = JWTBearerGrantProcessor(self.plugin.get_token_uri())
         try:
-            processor.verify(assertion, service_key)
+            return processor.verify(assertion, service_key)
         except (VerificationError, InvalidTokenError) as exc:
             raise InvalidGrant(str(exc))
 
     def issue_access_token(self, service_key):
+    def verified_subject(self, claimset, service_key):
+        """Verify the claim's subject and return it.
+
+        If the subject does not match the userid of the service_key, the
+        'Impersonate user' permission is required.
+        """
+        subject = claimset['sub']
+        actor = service_key['user_id']
+        if subject != actor:
+            # Check if actor is allowed to impersonate
+            uf = getToolByName(self.context, 'acl_users')
+            user = uf.getUserById(actor)
+            if not user:
+                raise(InvalidGrant('Service key user not found.'))
+            user = user.__of__(uf)
+
+            old_security_manager = getSecurityManager()
+            newSecurityManager(self.request, user)
+            try:
+                if not getSecurityManager().checkPermission(
+                        ImpersonateUser, self.context):
+                    raise InvalidGrant(
+                        "JWT subject doesn't match user_id of service key.")
+            finally:
+                setSecurityManager(old_security_manager)
+
+        return subject
+
         """Issue a time limited access token tied to service_key.
 
         Producing and storing the actual token is delegated to the PAS plugin.

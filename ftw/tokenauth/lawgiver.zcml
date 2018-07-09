@@ -6,7 +6,8 @@
     <include package="ftw.lawgiver" file="meta.zcml" />
 
     <lawgiver:ignore
-        permissions="ftw.tokenauth: Manage own Service Keys"
+        permissions="ftw.tokenauth: Impersonate user,
+                     ftw.tokenauth: Manage own Service Keys"
         />
 
 </configure>
