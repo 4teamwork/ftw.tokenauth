@@ -227,10 +227,9 @@ class OAuth2TokenEndpoint(BrowserView):
         unverified_claimset = jwt.decode(assertion, verify=False)
 
         client_id = unverified_claimset['iss']  # Issuer / Client-ID
-        user_id = unverified_claimset['sub']    # Subject / User-ID
 
         storage = CredentialStorage(self.plugin)
-        service_key = storage.get_service_key_for_client_id(client_id, user_id)
+        service_key = storage.get_service_key_for_client_id(client_id)
 
         if service_key is None:
             raise InvalidGrant('No associated key found')

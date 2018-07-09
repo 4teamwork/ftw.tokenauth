@@ -74,7 +74,7 @@ class TestStorage(FunctionalTestCase):
         service_key = create(Builder('service_key'))
 
         key_from_storage = storage.get_service_key_for_client_id(
-            service_key['client_id'], service_key['user_id'])
+            service_key['client_id'])
         self.assertEqual(service_key, dict(key_from_storage))
 
     def test_list_service_keys(self):

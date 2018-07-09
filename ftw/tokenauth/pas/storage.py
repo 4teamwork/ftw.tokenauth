@@ -88,19 +88,18 @@ class CredentialStorage(object):
 
         return self._service_keys[key_id]
 
-    def get_service_key_for_client_id(self, client_id, user_id):
-        """Return the service_key tied to client_id and user_id.
+    def get_service_key_for_client_id(self, client_id):
+        """Return the service_key tied to client_id.
         """
-        keys = self.list_service_keys(user_id)
-        keys_for_client_id = [
-            k for k in keys
+        keys = [
+            k for k in self._service_keys.values()
             if k['client_id'] == client_id]
 
-        if not keys_for_client_id:
+        if not keys:
             return None
 
-        assert len(keys_for_client_id) == 1
-        return keys_for_client_id[0]
+        assert len(keys) == 1
+        return keys[0]
 
     def list_service_keys(self, user_id):
         """Return all service_keys associated with user_id.
