@@ -5,6 +5,7 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="ftw.tokenauth">
 
   <five:registerPackage package="." initialize=".initialize" />
@@ -42,6 +43,13 @@
   <profilehook:hook
       profile="ftw.tokenauth:uninstall"
       handler=".hooks.default_profile_uninstalled"
+      />
+
+  <include package="ftw.upgrade" file="meta.zcml" />
+
+  <upgrade-step:directory
+      profile="ftw.tokenauth:default"
+      directory="./upgrades"
       />
 
 </configure>
