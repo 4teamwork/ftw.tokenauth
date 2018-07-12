@@ -8,11 +8,6 @@ class IssuerMismatch(VerificationError):
     """
 
 
-class SubjectMismatch(VerificationError):
-    """JWT 'sub' claim doesn't match user_id of service key.
-    """
-
-
 class MissingExpClaim(VerificationError):
     """JWT is missing an 'exp' claim.
     """

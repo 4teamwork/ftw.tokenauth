@@ -396,9 +396,11 @@ class TestUsageLogsView(FunctionalTestCase):
         logs_table = browser.css('#table-usage-logs').first
         self.assertEqual(
             [{'IP Address': '10.0.0.77',
+              'User ID': 'test_user_1_',
               'Time': 'Jan 05, 2018 12:45 PM',
               'User Agent': 'some-client/1.23.4'},
              {'IP Address': '10.0.0.77',
+              'User ID': 'test_user_1_',
               'Time': 'Jan 01, 2018 03:30 PM',
               'User Agent': 'some-client/1.23.4'}],
             logs_table.dicts()

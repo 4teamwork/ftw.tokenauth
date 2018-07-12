@@ -95,7 +95,9 @@ Name Description
 ==== ========================================================================
 iss  Issuer - must be ``client_id`` from service key
 aud  Audience - must be ``token_uri`` from service key
-sub  Subject - must be ``user_id`` from service key
+sub  Subject - must be ``user_id`` from service key or an arbitrary userid of
+     an existing user if the service key user is allowed to impersonate other
+     users.
 iat  The time the assertion was issued, specified as seconds since
      00:00:00 UTC, January 1, 1970.
 exp  The expiration time of the assertion, specified as seconds since
@@ -273,6 +275,23 @@ Examples of valid IP range specifications:
 Authentication attempts from an unauthorized source IP address are logged
 server side, but not indicated to the client in any particular way -
 authentication is simply not performed.
+
+Impersonation
+-------------
+
+Impersonation allows to authenticate as an arbitrary user instead of the user
+who issued the service key. This is useful if e.g. an application needs to act
+in the context of different users.
+
+To be able to impersonate another user the service key user needs the
+permission ``ftw.tokenauth: Impersonate user``. By default this permission is
+granted to the ``Manager`` role only. Be aware that with this permission a user
+is allowed to impersonate users with higher privileges and thus in fact gets
+all the permissions of the highest privileged user in the system.
+
+To impersonate a user pass his userid instead of the userid of the service
+key user with the ``sub`` claim in the JWT token when requesting an access
+token.
 
 Usage logs
 ----------

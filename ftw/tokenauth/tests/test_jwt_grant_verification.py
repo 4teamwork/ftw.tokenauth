@@ -8,7 +8,6 @@ from ftw.tokenauth.oauth2.exceptions import MissingExpClaim
 from ftw.tokenauth.oauth2.exceptions import MissingIatClaim
 from ftw.tokenauth.oauth2.exceptions import NBFClaimNotSupported
 from ftw.tokenauth.oauth2.exceptions import ScopesNotSupported
-from ftw.tokenauth.oauth2.exceptions import SubjectMismatch
 from ftw.tokenauth.oauth2.jwt_grants import JWTBearerGrantProcessor
 from ftw.tokenauth.testing import FTW_TOKENAUTH_UNIT_TESTING
 from ftw.tokenauth.testing.layers import DEFAULT_TESTING_TOKEN_URI
@@ -44,26 +43,6 @@ class TestJWTGrantVerification(unittest.TestCase):
             .having(iss='bogus-client-id'))
 
         with self.assertRaises(IssuerMismatch):
-            self.processor.verify(invalid_grant_token, service_key)
-
-    def test_jwt_subject_must_match_service_key_user_id(self):
-        # https://tools.ietf.org/html/rfc7521#section-5.2
-
-        # The assertion MUST contain a Subject. The Subject typically
-        # identifies an authorized accessor for which the access token is
-        # being requested (i.e., the resource owner or an authorized
-        # delegate)
-
-        private_key, service_key = create(
-            Builder('keypair')
-            .having(user_id='actual-user-id'))
-
-        invalid_grant_token = create(
-            Builder('jwt_grant')
-            .from_keypair((private_key, service_key))
-            .having(sub='bogus-user-id'))
-
-        with self.assertRaises(SubjectMismatch):
             self.processor.verify(invalid_grant_token, service_key)
 
     def test_jwt_must_contain_exp_claim(self):

@@ -101,7 +101,7 @@ class TokenAuthenticationPlugin(BasePlugin):
 
     security.declarePrivate('issue_access_token')
 
-    def issue_access_token(self, key_id):
+    def issue_access_token(self, key_id, user_id):
         """Create and store an access token tied to key_id.
         """
         storage = CredentialStorage(self)
@@ -118,6 +118,7 @@ class TokenAuthenticationPlugin(BasePlugin):
             'issued': datetime.now(),
             'expires_in': self.access_token_lifetime,
             'key_id': key_id,
+            'user_id': user_id,
         }
 
         storage.add_access_token(access_token)
@@ -247,8 +248,8 @@ class TokenAuthenticationPlugin(BasePlugin):
                          'disallowed IP %s' % client_ip)
                 return None
 
-        # Fetch and verify the user associated with the service_key
-        user_id = service_key['user_id']
+        # Fetch and verify the user associated with the stored access token
+        user_id = stored_access_token['user_id']
         pas = self._getPAS()
         # This only works for users in Plone site, not Zope application root
         info = pas._verifyUser(pas.plugins, user_id=user_id)

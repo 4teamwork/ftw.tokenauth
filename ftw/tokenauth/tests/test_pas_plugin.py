@@ -141,6 +141,7 @@ class TestTokenAuthPlugin(FunctionalTestCase):
         usage_logs = storage.get_usage_logs(access_token['key_id'])
         self.assertEqual(
             [{'issued': datetime(2018, 1, 1, 15, 30),
+              'user_id': 'test_user_1_',
               'ip_address': '10.0.0.77',
               'user_agent': 'some-client/1.23.4'}],
             usage_logs)
