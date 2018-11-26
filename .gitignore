@@ -5,10 +5,14 @@
 /.mr.developer.cfg
 /README.html
 /bin/
+/build/
 /buildout.cfg
 /coverage/
 /develop-eggs/
+/dist/
 /eggs/
+/include/
+/lib/
 /parts/
 /src/
 /var/
