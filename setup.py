@@ -65,7 +65,7 @@ setup(name='ftw.tokenauth',
           'zope.schema',
           'Zope2',
           # Other dependencies
-          'cryptography',
+          'cryptography < 3.4',
           'ftw.profilehook',
           'ftw.upgrade',
           'ipaddress',
