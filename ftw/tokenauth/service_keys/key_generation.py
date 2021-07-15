@@ -41,7 +41,7 @@ class KeyGenerator(object):
 def create_client_id():
     """Create an OAuth2 client ID (opaque string).
     """
-    return os.urandom(16).encode('hex')
+    return os.urandom(16).hex()
 
 
 def create_service_key_pair(user_id, title, token_uri, ip_range=None):
