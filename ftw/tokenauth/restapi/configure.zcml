@@ -11,5 +11,12 @@
       name="@service-keys"
       />
 
+  <plone:service
+      method="POST"
+      factory=".post.CreateToken"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      permission="zope.Public"
+      name="@service-keys"
+      />
 
 </configure>
