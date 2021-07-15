@@ -313,6 +313,109 @@ show every instance where JWT authentication grants signed with this key
 were used to obtain a new access token.
 
 
+REST API
+--------
+
+This product provides a plone.restapi based endpoint to handle service-keys,
+perfectly fit to use with Volto.
+
+Get available service-keys
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An authenticated user may issue a `GET` request to the `@service-keys` endpoint
+to get the list of her service keys::
+
+    GET /plone/@service-keys HTTP/1.1
+    Accept: application/json
+    Authorization: Basic YWRtaW46c2VjcmV0
+
+
+The endpoint will respond with the list of available keys::
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+        "@id": "http://localhost:8546/Plone/@service-keys",
+        "items": [
+            {
+                "client_id": "047b4742b738e15b38b96699691adc80",
+                "ip_range": null,
+                "issued": "2021-07-15T15:37:52.461861",
+                "key_id": "c37d6dbdd2612c2ec60fd9d474f49fb0a12e9889",
+                "last_used": "2021-07-15T15:38:57.036945",
+                "title": "title of this service-key"
+            }
+        ]
+    }
+
+
+Create a new service key
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+An authenticated user may issue a `POST` request to the `@service-keys` endpoint
+to obtain a new service key. Like in the Plone Classic interface, this service-key
+will be shown just once, and it will not be possible to get it again. This endpoint
+requires to pass a 'title' parameter to identify the service-key::
+
+
+    POST /plone/@service-keys HTTP/1.1
+    Accept: application/json
+    Authorization: Basic YWRtaW46c2VjcmV0
+
+    Content-Type: application/json
+
+    {
+        "title": "Title of a second service key",
+    }
+
+
+The endpoint will respond with the service key details::
+
+
+    HTTP/1.1 201 Created
+    Content-Type: application/json
+    Location: http://localhost:55001/plone/@service-keys/3ff14f2b5596bdc4e0712c6eb3e9f62960d0e252
+
+    {
+        "@id": "http://localhost:8546/Plone/@service-keys/3ff14f2b5596bdc4e0712c6eb3e9f62960d0e252",
+        "key_id": "3ff14f2b5596bdc4e0712c6eb3e9f62960d0e252",
+        "service_key": {
+            "client_id": "3ca5c6c8d7584c3e09a998e5d68299bc",
+            "ip_range": "",
+            "issued": "2021-07-15T16:35:59.294855",
+            "key_id": "3ff14f2b5596bdc4e0712c6eb3e9f62960d0e252",
+            "public_key": "-----BEGIN PUBLIC KEY-----\nMXXXXIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4YMHrQjUAi8nW6t+dkzn\nc+nP8SrcplZcgvcQNkDzoQEdjlBxBDhDAQswnpW2rSmH0weBxnubQVIJq4wO8PxM\n/yD97cTrJnGg9BXS8brlNIB5iqb5sLuXxmbiQgfms9Rc8WBN4dnUeHWNWYkqVq7b\nr7IGlzZixKKAiI3pPHFKPd8mo6+pDIRVWMr7GlkFQBPSfJFNVkw+X/UUGI2j8y96\nDiXpPczll50h+y4hxnQxW+rSHx42kTRjU9PYv89m0Psb2ZBohEmeabHVQ4mwFAzT\nMyv5YfNp3H+67gK3OB5i0CMZXu561beHuo493ki+Od0dNGVeRB3pKCLXgwCm9KGh\n7QIDAQAB\n-----END PUBLIC KEY-----\n",
+            "title": "Title of a second service key",
+            "token_uri": "http://localhost:8546/Plone/@@oauth2-token",
+            "user_id": "admin"
+        }
+    }
+
+
+Delete or revoke an existing service key
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An authenticated user may want to delete or revoke a previously created service key. To
+achieve that she can issue a `DELETE` request to the URL of the service key (the url of the
+service key can be obtained from the `@id` parameter of the key creation response, or
+concatenating the key_id with the URL of the standard @service-key endpoint, as follows::
+
+
+    DELETE /plone/@service-keys/3ff14f2b5596bdc4e0712c6eb3e9f62960d0e252 HTTP/1.1
+    Accept: application/json
+    Authorization: Basic YWRtaW46c2VjcmV0
+
+
+If the deletion is successful, the endpoint will respond with a `204 No Content` response::
+
+
+    HTTP/1.1 204 No Content
+
+
+
+
+
 Links
 =====
 
