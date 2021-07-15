@@ -145,7 +145,7 @@ class TokenAuthenticationPlugin(BasePlugin):
         tokens in OAuth2:
         https://tools.ietf.org/html/rfc6749#section-1.4
         """
-        return base64.urlsafe_b64encode(os.urandom(64))
+        return base64.urlsafe_b64encode(os.urandom(64)).decode()
 
     security.declarePrivate('issue_keypair')
 
