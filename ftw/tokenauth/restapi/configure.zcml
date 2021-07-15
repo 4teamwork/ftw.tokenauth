@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="ftw.tokenauth">
+
+  <plone:service
+      method="GET"
+      factory=".get.GetTokens"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      permission="zope.Public"
+      name="@service-keys"
+      />
+
+
+</configure>

@@ -16,6 +16,7 @@
 
   <include package=".service_keys" />
   <include package=".oauth2" />
+  <include package=".restapi" />
 
   <genericsetup:registerProfile
       name="default"
