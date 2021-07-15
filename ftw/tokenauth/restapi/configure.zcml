@@ -19,4 +19,13 @@
       name="@service-keys"
       />
 
+  <plone:service
+      method="DELETE"
+      factory=".delete.DeleteToken"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      permission="zope.Public"
+      name="@service-keys"
+      />
+
+
 </configure>
