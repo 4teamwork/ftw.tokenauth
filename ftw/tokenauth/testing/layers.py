@@ -18,6 +18,19 @@ class FtwTokenAuthLayer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # Load ZCML
+        import plone.restapi
+        xmlconfig.file(
+            'configure.zcml',
+            plone.restapi,
+            context=configurationContext
+        )
+        xmlconfig.file(
+            'meta.zcml',
+            plone.restapi,
+            context=configurationContext
+        )
+        z2.installProduct(app, 'plone.restapi')
+
         import ftw.tokenauth
         xmlconfig.file(
             'configure.zcml',
@@ -25,14 +38,6 @@ class FtwTokenAuthLayer(PloneSandboxLayer):
             context=configurationContext
         )
         z2.installProduct(app, 'ftw.tokenauth')
-
-        import plone.restapi
-        xmlconfig.file(
-            'configure.zcml',
-            plone.restapi,
-            context=configurationContext
-        )
-        z2.installProduct(app, 'plone.restapi')
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'ftw.tokenauth:default')

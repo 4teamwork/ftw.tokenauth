@@ -15,6 +15,7 @@ tests_require = [
     'requests',
     'plone.testing',
     'zope.configuration',
+    'plone.restapi[test]'
 ]
 
 
