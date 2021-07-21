@@ -50,6 +50,7 @@
                         <td>
                             <a tal:attributes="href string:${context/absolute_url}/@@manage-service-keys-logs?key_id=${key_info/key_id}"
                                 tal:condition="key_info/last_used"
+                                tal:on-error="string:(Never)"
                                 tal:content="python:toLocalizedTime(key_info['last_used'], long_format=1)" />
                         </td>
                         <td>
