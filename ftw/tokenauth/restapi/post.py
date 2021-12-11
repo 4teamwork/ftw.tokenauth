@@ -1,10 +1,11 @@
 from ftw.tokenauth import _
+from ftw.tokenauth.service_keys.browser.issue import create_json_keyfile
 from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zope.interface import alsoProvides
 
-import datetime
+import json
 import plone.protect.interfaces
 
 
@@ -41,9 +42,15 @@ class CreateToken(Service):
         service_key_id = (
             f"{self.context.absolute_url()}/@service-keys/{service_key['key_id']}"
         )
+
+        service_key_json = json.loads(create_json_keyfile(private_key, service_key))
+        service_key_json.update(
+            {"title": data.get("title"), "ip_range": data.get("ip_range")}
+        )
+
         result = {
             "@id": service_key_id,
-            "service_key": self.format_service_key(service_key),
+            "service_key": service_key_json,
         }
         self.request.response.setHeader(
             "Location",
@@ -51,13 +58,3 @@ class CreateToken(Service):
         )
         self.request.response.setStatus(201)
         return result
-
-    def format_service_key(self, service_key):
-        new_service_key = {}
-        for key, value in service_key.items():
-            if isinstance(value, datetime.datetime):
-                new_service_key[key] = value.isoformat()
-            else:
-                new_service_key[key] = value
-
-        return new_service_key
