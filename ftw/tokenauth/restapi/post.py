@@ -32,7 +32,7 @@ class CreateToken(Service):
         user_id = api.user.get_current().id
 
         private_key, service_key = self.get_plugin().issue_keypair(
-            user_id, data.get("title"), data.get("ip_range", "")
+            user_id, data.get("title"), data.get("ip_range")
         )
 
         self._key_issued = True
