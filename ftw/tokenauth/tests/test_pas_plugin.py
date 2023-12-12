@@ -5,6 +5,7 @@ from ftw.builder import create
 from ftw.testing import freeze
 from ftw.tokenauth.pas.storage import CredentialStorage
 from ftw.tokenauth.tests import FunctionalTestCase
+from plone import api
 from plone.app.testing import login
 from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
@@ -89,6 +90,25 @@ class TestTokenAuthPlugin(FunctionalTestCase):
             'access_token': access_token['token'],
         }
         self.assertEqual(None, self.plugin.authenticateCredentials(creds))
+
+    def test_authenticate_credentials_by_fullname(self):
+        self.request._client_addr = '127.0.0.1'
+        self.assertEqual('127.0.0.1', self.request.getClientAddr())
+
+        api.user.create(email='jane@plone.org', username='jane')
+        acl_users = api.portal.get_tool('acl_users')
+        acl_users.source_users.updateUser('jane', 'jane_username')
+
+        access_token = create(Builder('access_token')
+                              .for_user('jane_username'))
+        creds = {
+            'extractor': 'token_auth',
+            'access_token': access_token['token'],
+        }
+
+        self.assertEqual(
+            ('jane', 'jane'),
+            self.plugin.authenticateCredentials(creds))
 
     def test_authenticate_credentials_denies_unkown_client_ip(self):
         # If an allowed IP range is configured, any unknown client IP should
