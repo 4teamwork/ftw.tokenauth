@@ -15,7 +15,7 @@ from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
-from zope.interface import implements
+from zope.interface import implementer
 import base64
 import json
 import os
@@ -49,6 +49,7 @@ def addTokenAuthenticationPlugin(self, id_, title=None,
         )
 
 
+@implementer(IAuthenticationPlugin, IExtractionPlugin)
 class TokenAuthenticationPlugin(BasePlugin):
     """PAS Plugin that authenticates requests based on OAuth2 Bearer tokens.
 
@@ -56,10 +57,6 @@ class TokenAuthenticationPlugin(BasePlugin):
     a JWT authorization grant, and stored in a storage on this Plugin.
     """
 
-    implements(
-        IAuthenticationPlugin,
-        IExtractionPlugin,
-    )
     meta_type = "Token Authentication Plugin"
     security = ClassSecurityInfo()
 
@@ -148,7 +145,7 @@ class TokenAuthenticationPlugin(BasePlugin):
         tokens in OAuth2:
         https://tools.ietf.org/html/rfc6749#section-1.4
         """
-        return base64.urlsafe_b64encode(os.urandom(64))
+        return base64.urlsafe_b64encode(os.urandom(64)).decode()
 
     security.declarePrivate('issue_keypair')
 

@@ -15,6 +15,7 @@ tests_require = [
     'requests',
     'plone.testing',
     'zope.configuration',
+    'plone.restapi[test]'
 ]
 
 
@@ -27,7 +28,7 @@ setup(name='ftw.tokenauth',
       classifiers=[
           "Environment :: Web Environment",
           'Framework :: Plone',
-          'Framework :: Plone :: 4.3',
+          'Framework :: Plone :: 5.2',
           "Intended Audience :: Developers",
           'License :: OSI Approved :: GNU General Public License (GPL)',
           'Programming Language :: Python',
@@ -66,7 +67,6 @@ setup(name='ftw.tokenauth',
           'Zope2',
           # Other dependencies
           'cryptography < 3.4',
-          'ftw.profilehook',
           'ftw.upgrade',
           'ipaddress',
           'PyJWT',

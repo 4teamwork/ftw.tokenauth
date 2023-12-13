@@ -31,8 +31,8 @@ class KeyGenerator(object):
         fingerprint = hashlib.sha1(public_pem).hexdigest()
 
         pair = {}
-        pair['public_key'] = public_pem
-        pair['private_key'] = private_pem
+        pair['public_key'] = public_pem.decode()
+        pair['private_key'] = private_pem.decode()
         pair['fingerprint'] = fingerprint
         pair['issued'] = datetime.now()
         return pair
@@ -41,7 +41,7 @@ class KeyGenerator(object):
 def create_client_id():
     """Create an OAuth2 client ID (opaque string).
     """
-    return os.urandom(16).encode('hex')
+    return os.urandom(16).hex()
 
 
 def create_service_key_pair(user_id, title, token_uri, ip_range=None):
