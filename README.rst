@@ -289,9 +289,9 @@ granted to the ``Manager`` role only. Be aware that with this permission a user
 is allowed to impersonate users with higher privileges and thus in fact gets
 all the permissions of the highest privileged user in the system.
 
-To impersonate a user pass his userid instead of the userid of the service
-key user with the ``sub`` claim in the JWT token when requesting an access
-token.
+To impersonate a user pass his userid or loginname instead of the userid
+of the service key user with the ``sub`` claim in the JWT token when
+requesting an access token.
 
 Usage logs
 ----------

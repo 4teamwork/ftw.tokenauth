@@ -5,7 +5,8 @@ Changelog
 1.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add fallback user lookup by username (login).
+  [phgross]
 
 
 1.1.0 (2018-07-12)

@@ -254,12 +254,20 @@ class TokenAuthenticationPlugin(BasePlugin):
         # This only works for users in Plone site, not Zope application root
         info = pas._verifyUser(pas.plugins, user_id=user_id)
         if info is None:
-            return None
+            # fallback by login name
+            info = pas._verifyUser(pas.plugins, login=user_id)
+            if info is None:
+                return None
 
         mtool = getToolByName(getSite(), 'portal_membership')
         member = mtool.getMemberById(user_id)
         if member is None:
-            return None
+            # fallback by login name
+            member = api.user.get(username=user_id)
+            if not member:
+                return None
+
+            user_id = member.getId()
 
         return user_id, user_id
 
