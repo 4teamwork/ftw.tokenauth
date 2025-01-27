@@ -5,7 +5,7 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Properly extract authentication username [elioschmutz]
 
 
 1.2.0 (2023-12-13)

@@ -6,8 +6,10 @@ from ftw.testing import freeze
 from ftw.tokenauth.pas.storage import CredentialStorage
 from ftw.tokenauth.tests import FunctionalTestCase
 from plone import api
+from plone import api
 from plone.app.testing import login
 from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
 from zExceptions import Unauthorized
 import json
 
@@ -48,7 +50,7 @@ class TestTokenAuthPlugin(FunctionalTestCase):
             'access_token': create(Builder('access_token'))['token'],
         }
         self.assertEqual(
-            (TEST_USER_ID, TEST_USER_ID),
+            (TEST_USER_ID, TEST_USER_NAME),
             self.plugin.authenticateCredentials(creds))
 
     def test_authenticate_credentials_rejects_expired_token(self):
@@ -80,7 +82,7 @@ class TestTokenAuthPlugin(FunctionalTestCase):
         }
 
         self.assertEqual(
-            (TEST_USER_ID, TEST_USER_ID),
+            (TEST_USER_ID, TEST_USER_NAME),
             self.plugin.authenticateCredentials(creds))
 
     def test_authenticate_credentials_rejects_unknown_user(self):
@@ -107,7 +109,7 @@ class TestTokenAuthPlugin(FunctionalTestCase):
         }
 
         self.assertEqual(
-            ('jane', 'jane'),
+            ('jane', 'jane_username'),
             self.plugin.authenticateCredentials(creds))
 
     def test_authenticate_credentials_denies_unkown_client_ip(self):
@@ -147,7 +149,7 @@ class TestTokenAuthPlugin(FunctionalTestCase):
             'access_token': access_token['token'],
         }
         self.assertEqual(
-            (TEST_USER_ID, TEST_USER_ID),
+            (TEST_USER_ID, TEST_USER_NAME),
             self.plugin.authenticateCredentials(creds))
 
     def test_issuing_access_token_logs_key_usage(self):
