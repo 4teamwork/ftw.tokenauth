@@ -6,6 +6,7 @@ from ftw.tokenauth.tests import FunctionalTestCase
 from plone import api
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
 import jwt
 import transaction
 
@@ -169,7 +170,7 @@ class TestOAuth2TokenEndpoint(FunctionalTestCase):
         token = browser.json['access_token']
         creds = {'access_token': token, 'extractor': 'token_auth'}
         self.assertEqual(
-            (TEST_USER_ID, TEST_USER_ID),
+            (TEST_USER_ID, TEST_USER_NAME),
             self.plugin.authenticateCredentials(creds))
 
     @browsing

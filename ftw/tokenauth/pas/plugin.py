@@ -269,7 +269,7 @@ class TokenAuthenticationPlugin(BasePlugin):
 
             user_id = member.getId()
 
-        return user_id, user_id
+        return user_id, member.getUser().getUserName()
 
     security.declareProtected(ManagePortal, 'manage_updateConfig')
 
